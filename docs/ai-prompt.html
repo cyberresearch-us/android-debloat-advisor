@@ -149,6 +149,50 @@ Tell me how to test that the phone still works:
 Remind me that I can restore any package with:
   adb shell cmd package install-existing &lt;package&gt;
 
+  *** GATE 6 — Stop here. ***
+  Ask me: "Did everything work? Tell me if anything is broken."
+  Wait for my response.
+
+---
+
+STEP 7 — Fix anything that broke
+If I report a problem (app crashing, feature missing, calls not working):
+  1. Identify which removed package likely caused the issue.
+  2. Show me the restore command you plan to run.
+  3. Wait for me to approve, then run it.
+  4. Ask me to test again.
+  5. Repeat until the issue is resolved.
+
+If I say everything is fine, skip to Step 8.
+
+---
+
+STEP 8 — Report and submit issues (optional)
+Ask me: "Would you like to submit a report to help improve the project?
+For example, if a package was wrongly suggested, or if you found something
+that should be added to the rules."
+
+If I say yes:
+  1. Check if the GitHub CLI is available: run "gh auth status".
+  2. If authenticated, help me create an issue on the project repo:
+     gh issue create --repo cyberresearch-us/android-debloat-advisor \
+       --title "[short description]" \
+       --body "[details: device model, Android version, package name,
+               what happened, what the correct classification should be]"
+  3. If gh is not available, generate a pre-filled URL I can open:
+     https://github.com/cyberresearch-us/android-debloat-advisor/issues/new
+     and show me the title and body to paste in.
+
+If I say no, we are done.
+
+---
+
+STEP 9 — Clean up
+Remind me to:
+  - Turn OFF USB debugging: Settings &gt; Developer options &gt; USB debugging &gt; OFF
+  - Disconnect the USB cable
+  - Reboot the phone once to make sure everything starts cleanly
+
 ---
 
 IMPORTANT RULES (follow these at ALL times):
@@ -157,6 +201,7 @@ IMPORTANT RULES (follow these at ALL times):
 - NEVER remove com.google.android.webview — it is NOT a browser; many apps need it.
 - NEVER remove the launcher unless I have installed an alternative first.
 - If you are unsure about any package, classify it as REVIEW, not REMOVE.
+- If I report something is broken, help me restore the package IMMEDIATELY.
 - This phone is for a child. Remove anything that enables web browsing,
   social media, gaming, streaming video/music, or app stores other than
   Play Store. Keep email, maps, calendar, camera, phone, and messages.
@@ -170,14 +215,16 @@ IMPORTANT RULES (follow these at ALL times):
   </div>
 
   <h2>What to expect</h2>
-  <p>The AI stops at <strong>5 gates</strong>. Nothing destructive happens until you say so.</p>
+  <p>The AI stops at <strong>6 gates</strong>. Nothing destructive happens until you say so.</p>
   <ol>
-    <li><strong>Gate 1</strong> &mdash; AI confirms the phone is connected. You verify.</li>
+    <li><strong>Gate 1</strong> &mdash; AI confirms the phone is connected. You verify the model.</li>
     <li><strong>Gate 2</strong> &mdash; AI reports how many packages it found. You say continue.</li>
     <li><strong>Gate 3</strong> &mdash; AI shows the full Remove / Keep / Review table. <strong>You pick what actually gets removed.</strong></li>
     <li><strong>Gate 4</strong> &mdash; AI shows every command it will run, <em>without running them</em>. You say "execute".</li>
-    <li><strong>Gate 5</strong> &mdash; AI shows results. You test the phone and confirm.</li>
+    <li><strong>Gate 5</strong> &mdash; AI shows results (success/failure for each package).</li>
+    <li><strong>Gate 6</strong> &mdash; You test the phone. If anything broke, the AI helps restore it immediately.</li>
   </ol>
+  <p>After that, the AI can optionally help you <strong>submit a GitHub issue</strong> if a package was wrongly classified &mdash; so the rules improve for everyone. Then it reminds you to turn off USB debugging and disconnect.</p>
   <p>The whole process takes about 5&ndash;10 minutes. You stay in control the entire time.</p>
 
   <script>

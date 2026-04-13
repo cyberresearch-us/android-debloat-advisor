@@ -2,6 +2,8 @@
 
 If you use an AI coding tool with terminal access — **Cursor**, **Windsurf**, **Claude Code**, **GitHub Copilot in VS Code**, or similar — you can paste the prompt below and let the AI handle the entire process. You just review and approve at each gate.
 
+**Note:** The AI does everything directly through ADB in your terminal. It does not need the web page — these are two independent options for the same result.
+
 ## Requirements
 
 - Your phone connected via USB with **USB debugging** enabled (see [device setup](device-setup.html) if you need help).
@@ -103,6 +105,50 @@ Tell me how to test that the phone still works:
 Remind me that I can restore any package with:
   adb shell cmd package install-existing <package>
 
+  *** GATE 6 — Stop here. ***
+  Ask me: "Did everything work? Tell me if anything is broken."
+  Wait for my response.
+
+---
+
+STEP 7 — Fix anything that broke
+If I report a problem (app crashing, feature missing, calls not working):
+  1. Identify which removed package likely caused the issue.
+  2. Show me the restore command you plan to run.
+  3. Wait for me to approve, then run it.
+  4. Ask me to test again.
+  5. Repeat until the issue is resolved.
+
+If I say everything is fine, skip to Step 8.
+
+---
+
+STEP 8 — Report and submit issues (optional)
+Ask me: "Would you like to submit a report to help improve the project?
+For example, if a package was wrongly suggested, or if you found something
+that should be added to the rules."
+
+If I say yes:
+  1. Check if the GitHub CLI is available: run "gh auth status".
+  2. If authenticated, help me create an issue on the project repo:
+     gh issue create --repo cyberresearch-us/android-debloat-advisor \
+       --title "[short description]" \
+       --body "[details: device model, Android version, package name,
+               what happened, what the correct classification should be]"
+  3. If gh is not available, generate a pre-filled URL I can open:
+     https://github.com/cyberresearch-us/android-debloat-advisor/issues/new
+     and show me the title and body to paste in.
+
+If I say no, we are done.
+
+---
+
+STEP 9 — Clean up
+Remind me to:
+  - Turn OFF USB debugging: Settings > Developer options > USB debugging > OFF
+  - Disconnect the USB cable
+  - Reboot the phone once to make sure everything starts cleanly
+
 ---
 
 IMPORTANT RULES (follow these at ALL times):
@@ -111,6 +157,7 @@ IMPORTANT RULES (follow these at ALL times):
 - NEVER remove com.google.android.webview — it is NOT a browser; many apps need it.
 - NEVER remove the launcher unless I have installed an alternative first.
 - If you are unsure about any package, classify it as REVIEW, not REMOVE.
+- If I report something is broken, help me restore the package IMMEDIATELY.
 - This phone is for a child. Remove anything that enables web browsing,
   social media, gaming, streaming video/music, or app stores other than
   Play Store. Keep email, maps, calendar, camera, phone, and messages.
@@ -121,13 +168,16 @@ IMPORTANT RULES (follow these at ALL times):
 
 ## What to expect
 
-The AI stops at **5 gates**. Nothing destructive happens until you say so.
+The AI stops at **6 gates**. Nothing destructive happens until you say so.
 
-1. **Gate 1** — AI confirms the phone is connected. You verify.
+1. **Gate 1** — AI confirms the phone is connected. You verify the model.
 2. **Gate 2** — AI reports how many packages it found. You say continue.
 3. **Gate 3** — AI shows the full Remove / Keep / Review table. **You pick what actually gets removed.**
 4. **Gate 4** — AI shows every command it will run, *without running them*. You say "execute".
-5. **Gate 5** — AI shows results. You test the phone and confirm.
+5. **Gate 5** — AI shows results (success/failure for each package).
+6. **Gate 6** — You test the phone. If anything broke, the AI helps restore it immediately.
+
+After that, the AI can optionally help you **submit a GitHub issue** if a package was wrongly classified — so the rules improve for everyone. Then it reminds you to turn off USB debugging and disconnect.
 
 The whole process takes about 5–10 minutes. You stay in control the entire time.
 
