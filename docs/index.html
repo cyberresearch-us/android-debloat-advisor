@@ -302,6 +302,9 @@
 
     <section id="resultsSection" hidden>
       <h2>Review packages</h2>
+      <div style="margin-bottom: 0.5rem;">
+        <input type="text" id="searchPkg" placeholder="Search packages… (e.g. messaging, chrome, facebook)" style="width:100%;padding:0.5rem 0.75rem;border:1px solid var(--border);border-radius:6px;background:var(--card);color:var(--text);font-size:0.9rem;" />
+      </div>
       <div class="toolbar">
         <label class="filter">Filter</label>
         <select id="filterCat">
@@ -526,9 +529,11 @@
       const tbody = document.getElementById("tbody");
       const filterCat = document.getElementById("filterCat").value;
       const filterAct = document.getElementById("filterAction").value;
+      const searchTerm = (document.getElementById("searchPkg").value || "").toLowerCase();
       tbody.innerHTML = "";
 
       for (const r of rows) {
+        if (searchTerm && !r.package.toLowerCase().includes(searchTerm) && !(r.categoryLabel || "").toLowerCase().includes(searchTerm) && !(r.reason || "").toLowerCase().includes(searchTerm)) continue;
         if (filterCat && r.categoryId !== filterCat) continue;
         if (filterAct === "selected" && !r.removeChecked) continue;
         if (filterAct && filterAct !== "selected") {
@@ -651,6 +656,7 @@
     document.getElementById("btnAnalyze").addEventListener("click", analyze);
     document.getElementById("filterCat").addEventListener("change", renderTable);
     document.getElementById("filterAction").addEventListener("change", renderTable);
+    document.getElementById("searchPkg").addEventListener("input", renderTable);
     document.querySelectorAll('input[name="ex"]').forEach((el) => el.addEventListener("change", refreshExport));
     document.querySelectorAll('input[name="os"]').forEach((el) => el.addEventListener("change", refreshExport));
 
