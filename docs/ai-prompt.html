@@ -64,42 +64,99 @@
   <div class="prompt-box" id="promptBox"><button class="copy-btn" id="copyBtn" type="button">Copy</button>I have an Android phone connected to this computer via USB with USB debugging enabled.
 ADB (Android Debug Bridge) should be installed. If not, help me install it.
 
-Please do the following:
+This process has GATES. At each gate you MUST stop, show me what you
+found or what you plan to do, and WAIT for me to say "continue" or
+give you corrections before proceeding to the next step.
 
-1. Run "adb devices" to confirm the phone is connected and authorized.
-   If it shows "unauthorized", tell me to check the phone screen and tap Allow.
+---
 
-2. Run "adb shell pm list packages -f" to export every installed package.
+STEP 1 — Check connection
+Run "adb devices" to confirm the phone is connected and authorized.
+Show me the output (device model, serial, status).
 
-3. Classify each package into one of these categories:
-   - REMOVE: Bloatware, social media, pre-installed apps I likely don't use
-     (Facebook, Microsoft stubs, Samsung Game tools, AR/VR, Bixby,
-     Galaxy Store, ANT+, carrier bloat).
-   - KEEP: Critical system packages that will break the phone if removed
-     (launcher, dialer, in-call UI, IMS, Play Services, Google Services
-     Framework, WebView, permission controller, Settings, SystemUI,
-     telephony providers, package installer).
-   - REVIEW: Everything else — present these so I can decide.
+  *** GATE 1 — Stop here. ***
+  Tell me: Is the device connected? What model is it?
+  If it shows "unauthorized", tell me to check the phone and tap Allow.
+  Wait for me to say "continue".
 
-4. Show me the results organized by category in a table.
-   For each package show: package name, what it is, and your suggestion.
+---
 
-5. Ask me to confirm which packages to remove. Wait for my response.
-   Do NOT run any uninstall commands until I approve.
+STEP 2 — Export packages
+Run "adb shell pm list packages -f" to get every installed package.
+Count the total and tell me how many you found.
 
-6. For packages I approve, generate and run the commands using:
-   - System/preloaded apps: adb shell pm uninstall -k --user 0 &lt;package&gt;
-   - User-installed apps (under /data/app): adb shell pm uninstall --user 0 &lt;package&gt;
+  *** GATE 2 — Stop here. ***
+  Tell me: "Found [N] packages. Ready to classify them."
+  Wait for me to say "continue".
 
-7. After running, tell me how to test (make a call, open camera, check
-   notifications) and remind me that I can restore any package with:
-   adb shell cmd package install-existing &lt;package&gt;
+---
 
-Important rules:
-- NEVER remove a package without my explicit approval.
-- NEVER remove com.google.android.webview — it is NOT a browser, many apps need it.
-- NEVER remove the launcher unless I have installed an alternative and set it as default.
-- If you are unsure about a package, classify it as REVIEW, not REMOVE.
+STEP 3 — Classify packages
+Classify each package into one of these categories:
+  - REMOVE: Bloatware, social media, pre-installed apps the user likely
+    does not want (Facebook, Microsoft stubs, Samsung Game tools, AR/VR,
+    Bixby, Galaxy Store, ANT+, carrier bloat).
+  - KEEP: Critical system packages that will break the phone if removed
+    (launcher, dialer, in-call UI, IMS, Play Services, Google Services
+    Framework, WebView, permission controller, Settings, SystemUI,
+    telephony providers, package installer).
+  - REVIEW: Everything else — present these so I can decide.
+
+Show me the results organized by category in a table.
+For each package show: package name, what it does, and your suggestion.
+
+  *** GATE 3 — Stop here. ***
+  Show me:
+    - Summary counts (how many REMOVE, KEEP, REVIEW)
+    - Full REMOVE list with explanations
+    - Full KEEP list (so I can verify nothing important is being removed)
+    - REVIEW list (I will tell you which to add to REMOVE or KEEP)
+  Wait for me to review and tell you which packages to actually remove.
+  Do NOT proceed until I give you an explicit list or say "approved".
+
+---
+
+STEP 4 — Show the exact commands (dry run)
+For the packages I approved, show me every command you are about to run.
+Use this format:
+  - System/preloaded apps: adb shell pm uninstall -k --user 0 &lt;package&gt;
+  - User-installed apps (under /data/app): adb shell pm uninstall --user 0 &lt;package&gt;
+
+  *** GATE 4 — Stop here. ***
+  Show me the full command list. Do NOT run anything yet.
+  Tell me: "These are the [N] commands I will run. Say 'execute' to proceed."
+  Wait for me to say "execute".
+
+---
+
+STEP 5 — Execute
+Run ONLY the commands I approved in Gate 4. Show me the result of each
+(Success or Failure). Summarize at the end.
+
+  *** GATE 5 — Stop here. ***
+  Show me a summary: how many succeeded, how many failed, any errors.
+  Wait for me to acknowledge.
+
+---
+
+STEP 6 — Verify and undo instructions
+Tell me how to test that the phone still works:
+  - Make a phone call
+  - Open the camera
+  - Send a text message
+  - Check that notifications work
+  - Open Maps / email / any app I said to keep
+Remind me that I can restore any package with:
+  adb shell cmd package install-existing &lt;package&gt;
+
+---
+
+IMPORTANT RULES (follow these at ALL times):
+- NEVER skip a gate. Always stop and wait for my response.
+- NEVER run any uninstall command without my explicit approval.
+- NEVER remove com.google.android.webview — it is NOT a browser; many apps need it.
+- NEVER remove the launcher unless I have installed an alternative first.
+- If you are unsure about any package, classify it as REVIEW, not REMOVE.
 - This phone is for a child. Remove anything that enables web browsing,
   social media, gaming, streaming video/music, or app stores other than
   Play Store. Keep email, maps, calendar, camera, phone, and messages.
@@ -113,13 +170,13 @@ Important rules:
   </div>
 
   <h2>What to expect</h2>
+  <p>The AI stops at <strong>5 gates</strong>. Nothing destructive happens until you say so.</p>
   <ol>
-    <li>The AI checks the USB connection.</li>
-    <li>Pulls the full package list (typically 300&ndash;500 lines).</li>
-    <li>Presents a categorized table for you to review.</li>
-    <li>Waits for your go-ahead before touching anything.</li>
-    <li>Runs only the commands you approved.</li>
-    <li>Tells you how to verify and how to undo.</li>
+    <li><strong>Gate 1</strong> &mdash; AI confirms the phone is connected. You verify.</li>
+    <li><strong>Gate 2</strong> &mdash; AI reports how many packages it found. You say continue.</li>
+    <li><strong>Gate 3</strong> &mdash; AI shows the full Remove / Keep / Review table. <strong>You pick what actually gets removed.</strong></li>
+    <li><strong>Gate 4</strong> &mdash; AI shows every command it will run, <em>without running them</em>. You say "execute".</li>
+    <li><strong>Gate 5</strong> &mdash; AI shows results. You test the phone and confirm.</li>
   </ol>
   <p>The whole process takes about 5&ndash;10 minutes. You stay in control the entire time.</p>
 
