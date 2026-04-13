@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self'; connect-src 'self'; form-action 'none'; base-uri 'none';" />
+  <meta name="referrer" content="no-referrer" />
   <title>Android Package Advisor</title>
   <style>
     :root {
@@ -676,11 +678,21 @@
       const infoEl = document.getElementById("deviceInfo");
       if (pkgs.length > 0) {
         const d = detectDevice(pkgs);
-        document.getElementById("deviceBrand").innerHTML =
-          `<strong>Detected device:</strong> ${d.brand} &nbsp;·&nbsp; ` +
-          `${d.total} packages found &nbsp;·&nbsp; ` +
-          `<span style="color:var(--danger)">${d.removable} suggested for removal</span> &nbsp;·&nbsp; ` +
-          `<span style="color:var(--muted)">${d.critical} critical (protected)</span>`;
+        const brandEl = document.getElementById("deviceBrand");
+        brandEl.textContent = "";
+        const strong = document.createElement("strong");
+        strong.textContent = "Detected device: ";
+        brandEl.appendChild(strong);
+        brandEl.appendChild(document.createTextNode(`${d.brand}  \u00B7  ${d.total} packages found  \u00B7  `));
+        const rmSpan = document.createElement("span");
+        rmSpan.style.color = "var(--danger)";
+        rmSpan.textContent = `${d.removable} suggested for removal`;
+        brandEl.appendChild(rmSpan);
+        brandEl.appendChild(document.createTextNode("  \u00B7  "));
+        const critSpan = document.createElement("span");
+        critSpan.style.color = "var(--muted)";
+        critSpan.textContent = `${d.critical} critical (protected)`;
+        brandEl.appendChild(critSpan);
         infoEl.hidden = false;
       } else {
         infoEl.hidden = true;
