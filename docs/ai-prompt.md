@@ -1,188 +1,27 @@
-# Let an AI do it for you
+# AI Prompt Builder
 
-If you use an AI coding tool with terminal access — **Cursor**, **Windsurf**, **Claude Code**, **GitHub Copilot in VS Code**, or similar — you can paste the prompt below and let the AI handle the entire process. You just review and approve at each gate.
+Use the **[interactive prompt builder](ai-prompt.html)** to create a custom prompt for your AI coding tool.
 
-**Note:** The AI does everything directly through ADB in your terminal. It does not need the web page — these are two independent options for the same result.
+## How it works
 
-## Requirements
+1. Open the [prompt builder page](ai-prompt.html).
+2. Check the boxes for what you need help with:
+   - **USB debugging setup** — if you haven't enabled Developer Mode yet.
+   - **Install ADB** — if ADB isn't installed on your computer.
+   - **Debloat the phone** — the main process (checked by default).
+3. The page builds a single prompt with numbered steps and safety gates.
+4. Click **Copy**, paste into your AI tool (Cursor, Windsurf, Claude Code, etc.), and follow along.
 
-- Your phone connected via USB with **USB debugging** enabled (see [device setup](device-setup.html) if you need help).
-- **ADB** installed on your computer (the AI can help you install it too).
-- An AI coding tool that can run terminal commands.
+The prompt is written for compatibility with smaller and local models — flat numbered steps, one action per step, explicit commands, and literal expected outputs.
 
-## The prompt
+## What the AI does vs. what you do
 
-Copy everything inside the block below and paste it into your AI assistant:
+| AI does | You do |
+|---------|--------|
+| Runs ADB commands | Tap on the phone screen when prompted |
+| Scans and sorts packages | Review the lists and approve removals |
+| Shows commands before running | Say "execute" to proceed |
+| Reports results | Test the phone and report issues |
+| Helps restore broken packages | Confirm the fix worked |
 
----
-
-````text
-I have an Android phone connected to this computer via USB with USB debugging enabled.
-ADB (Android Debug Bridge) should be installed. If not, help me install it.
-
-This process has GATES. At each gate you MUST stop, show me what you
-found or what you plan to do, and WAIT for me to say "continue" or
-give you corrections before proceeding to the next step.
-
----
-
-STEP 1 — Check connection
-Run "adb devices" to confirm the phone is connected and authorized.
-Show me the output (device model, serial, status).
-
-  *** GATE 1 — Stop here. ***
-  Tell me: Is the device connected? What model is it?
-  If it shows "unauthorized", tell me to check the phone and tap Allow.
-  Wait for me to say "continue".
-
----
-
-STEP 2 — Export packages
-Run "adb shell pm list packages -f" to get every installed package.
-Count the total and tell me how many you found.
-
-  *** GATE 2 — Stop here. ***
-  Tell me: "Found [N] packages. Ready to classify them."
-  Wait for me to say "continue".
-
----
-
-STEP 3 — Classify packages
-Classify each package into one of these categories:
-  - REMOVE: Bloatware, social media, pre-installed apps the user likely
-    does not want (Facebook, Microsoft stubs, Samsung Game tools, AR/VR,
-    Bixby, Galaxy Store, ANT+, carrier bloat).
-  - KEEP: Critical system packages that will break the phone if removed
-    (launcher, dialer, in-call UI, IMS, Play Services, Google Services
-    Framework, WebView, permission controller, Settings, SystemUI,
-    telephony providers, package installer).
-  - REVIEW: Everything else — present these so I can decide.
-
-Show me the results organized by category in a table.
-For each package show: package name, what it does, and your suggestion.
-
-  *** GATE 3 — Stop here. ***
-  Show me:
-    - Summary counts (how many REMOVE, KEEP, REVIEW)
-    - Full REMOVE list with explanations
-    - Full KEEP list (so I can verify nothing important is being removed)
-    - REVIEW list (I will tell you which to add to REMOVE or KEEP)
-  Wait for me to review and tell you which packages to actually remove.
-  Do NOT proceed until I give you an explicit list or say "approved".
-
----
-
-STEP 4 — Show the exact commands (dry run)
-For the packages I approved, show me every command you are about to run.
-Use this format:
-  - System/preloaded apps: adb shell pm uninstall -k --user 0 <package>
-  - User-installed apps (under /data/app): adb shell pm uninstall --user 0 <package>
-
-  *** GATE 4 — Stop here. ***
-  Show me the full command list. Do NOT run anything yet.
-  Tell me: "These are the [N] commands I will run. Say 'execute' to proceed."
-  Wait for me to say "execute".
-
----
-
-STEP 5 — Execute
-Run ONLY the commands I approved in Gate 4. Show me the result of each
-(Success or Failure). Summarize at the end.
-
-  *** GATE 5 — Stop here. ***
-  Show me a summary: how many succeeded, how many failed, any errors.
-  Wait for me to acknowledge.
-
----
-
-STEP 6 — Verify and undo instructions
-Tell me how to test that the phone still works:
-  - Make a phone call
-  - Open the camera
-  - Send a text message
-  - Check that notifications work
-  - Open Maps / email / any app I said to keep
-Remind me that I can restore any package with:
-  adb shell cmd package install-existing <package>
-
-  *** GATE 6 — Stop here. ***
-  Ask me: "Did everything work? Tell me if anything is broken."
-  Wait for my response.
-
----
-
-STEP 7 — Fix anything that broke
-If I report a problem (app crashing, feature missing, calls not working):
-  1. Identify which removed package likely caused the issue.
-  2. Show me the restore command you plan to run.
-  3. Wait for me to approve, then run it.
-  4. Ask me to test again.
-  5. Repeat until the issue is resolved.
-
-If I say everything is fine, skip to Step 8.
-
----
-
-STEP 8 — Report and submit issues (optional)
-Ask me: "Would you like to submit a report to help improve the project?
-For example, if a package was wrongly suggested, or if you found something
-that should be added to the rules."
-
-If I say yes:
-  1. Check if the GitHub CLI is available: run "gh auth status".
-  2. If authenticated, help me create an issue on the project repo:
-     gh issue create --repo cyberresearch-us/android-debloat-advisor \
-       --title "[short description]" \
-       --body "[details: device model, Android version, package name,
-               what happened, what the correct classification should be]"
-  3. If gh is not available, generate a pre-filled URL I can open:
-     https://github.com/cyberresearch-us/android-debloat-advisor/issues/new
-     and show me the title and body to paste in.
-
-If I say no, we are done.
-
----
-
-STEP 9 — Clean up
-Remind me to:
-  - Turn OFF USB debugging: Settings > Developer options > USB debugging > OFF
-  - Disconnect the USB cable
-  - Reboot the phone once to make sure everything starts cleanly
-
----
-
-IMPORTANT RULES (follow these at ALL times):
-- NEVER skip a gate. Always stop and wait for my response.
-- NEVER run any uninstall command without my explicit approval.
-- NEVER remove com.google.android.webview — it is NOT a browser; many apps need it.
-- NEVER remove the launcher unless I have installed an alternative first.
-- If you are unsure about any package, classify it as REVIEW, not REMOVE.
-- If I report something is broken, help me restore the package IMMEDIATELY.
-- This phone is for a child. Remove anything that enables web browsing,
-  social media, gaming, streaming video/music, or app stores other than
-  Play Store. Keep email, maps, calendar, camera, phone, and messages.
-  (Delete or edit this line if the phone is not for a child.)
-````
-
----
-
-## What to expect
-
-The AI stops at **6 gates**. Nothing destructive happens until you say so.
-
-1. **Gate 1** — AI confirms the phone is connected. You verify the model.
-2. **Gate 2** — AI reports how many packages it found. You say continue.
-3. **Gate 3** — AI shows the full Remove / Keep / Review table. **You pick what actually gets removed.**
-4. **Gate 4** — AI shows every command it will run, *without running them*. You say "execute".
-5. **Gate 5** — AI shows results (success/failure for each package).
-6. **Gate 6** — You test the phone. If anything broke, the AI helps restore it immediately.
-
-After that, the AI can optionally help you **submit a GitHub issue** if a package was wrongly classified — so the rules improve for everyone. Then it reminds you to turn off USB debugging and disconnect.
-
-The whole process takes about 5–10 minutes. You stay in control the entire time.
-
-## Customizing the prompt
-
-- **Not for a child?** Delete the last line about child restrictions.
-- **Want to keep certain apps?** Add a line like: `Keep these apps: Zoom, Duolingo, Google Photos`.
-- **Specific device?** Add: `The phone is a Samsung Galaxy S10+ (SM-G975U1) running Android 12.`
+Nothing destructive runs without your explicit approval.
