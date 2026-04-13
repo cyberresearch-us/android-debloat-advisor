@@ -1,113 +1,118 @@
 # Android Package Advisor
 
-A static tool that reads your phone's installed-package list, suggests what is safe to remove vs. keep, and exports the exact shell commands — **no account, no server, no build step**.
+Remove bloatware from Android phones — safely, with suggestions you review before anything runs.
 
 ![Android Package Advisor screenshot](docs/screenshot.png)
 
 ---
 
-## What it does
+## Use it now
 
-1. You paste `adb shell pm list packages -f` output into the site.
-2. Rules in `data/rules.json` label every package: **Remove** / **Keep** / **Review**.
-3. You tick checkboxes to adjust, then copy the `adb shell pm uninstall …` command block.
-4. Run that block on your PC while the phone is connected — done.
+**[Open Android Package Advisor](https://cyberresearch-us.github.io/android-debloat-advisor/)**
 
-> **Disclaimer:** Removing the wrong package can break calling, the home screen, or mobile data. Commands generated here use `pm uninstall -k --user 0` which is **reversible** — the APK stays on the system image. Restore any package with `adb shell cmd package install-existing <package>`.
+No install, no account. Works in any browser.
 
 ---
 
-## Deploy to GitHub Pages (zero ops)
+## How it works
 
-1. [Create a new GitHub repository](https://github.com/new) (public or private).
-2. Push this project:
-   ```powershell
-   cd android-debloat-advisor
-   git remote add origin https://github.com/<your-username>/<repo-name>.git
-   git push -u origin main
-   ```
-3. In the repo on GitHub: **Settings → Pages → Build and deployment → Source**:  
-   - **Deploy from branch**  
-   - Branch: **main**  
-   - Folder: **`/docs`**  
-   - Click **Save**.
-4. Wait ~60 seconds. Your site will be live at:  
-   `https://<your-username>.github.io/<repo-name>/`
+You need a computer, a USB cable, and 10 minutes.
 
-That is everything. No npm, no Docker, no server.
+| Step | What you do |
+|------|-------------|
+| **1. Prepare the phone** | Turn on Developer Options and USB debugging in Settings. |
+| **2. Install ADB on your computer** | Download [Android Platform Tools](https://developer.android.com/studio/releases/platform-tools) (small ZIP, no Android Studio needed). |
+| **3. Export the package list** | Connect the phone via USB and run one command to copy all installed packages to your clipboard. |
+| **4. Paste into the advisor** | Open the [tool](https://cyberresearch-us.github.io/android-debloat-advisor/), paste, click **Analyze**. |
+| **5. Review suggestions** | Every package gets a label: **Remove**, **Keep**, or **Review**. Adjust the checkboxes to match what you want. |
+| **6. Copy and run** | Click **Copy to clipboard**, paste the commands back into your terminal. Done. |
+
+**Never done this before?** The **[full device setup guide](https://cyberresearch-us.github.io/android-debloat-advisor/device-setup.html)** walks through every step with screenshots — from tapping Build Number 7 times to running your first command.
 
 ---
 
-## Use the app
+## Is this safe?
 
-See the **[full device setup guide](docs/device-setup.html)** for step-by-step instructions including:
+The commands use `pm uninstall -k --user 0`, which **disables** the app for your user profile. The actual APK stays on the phone's system image. If something breaks, restore it immediately:
 
-- Enabling Developer Options on Samsung / Android phones
-- Installing ADB on Windows, macOS, or Linux
-- Connecting the phone and authorising USB debugging
-- Exporting the package list to clipboard
-- Running the generated commands safely
-- Troubleshooting common issues
-
----
-
-## Contributing rules
-
-Rules live in `data/rules.json`. After editing, sync to `docs/data/rules.json`:
-
-```powershell
-.\scripts\sync-rules.ps1
+```
+adb shell cmd package install-existing com.example.package
 ```
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for guidance on adding package names, prefixes, and categories.
-
----
-
-## Security & CI
-
-GitHub Actions (`.github/workflows/ci.yml`) runs on every push and PR:
-
-| Check | Tool |
-|-------|------|
-| Rules files in sync | shell `cmp` |
-| Filesystem scan | [Trivy v0.35](https://github.com/aquasecurity/trivy-action) |
-| Secret detection | [Gitleaks v2](https://github.com/gitleaks/gitleaks-action) |
-
-See [SECURITY.md](SECURITY.md) for local scan instructions and the threat model.
+The advisor marks critical packages (dialer, home screen, Play Services, etc.) as **Keep** and blocks the checkbox so you cannot accidentally remove them.
 
 ---
 
 ## Parental controls
 
-Uninstalling packages is **not** a substitute for parental controls. Read [docs/family-link.html](docs/family-link.html) for Family Link setup and checklist.
+Removing apps is a good start, but it does **not** block the internet or prevent new installs. Pair this tool with **Google Family Link** for app approval, web filtering, and screen time.
+
+**[Family Link setup guide and checklist](https://cyberresearch-us.github.io/android-debloat-advisor/family-link.html)**
+
+---
+---
+
+## For developers
+
+Everything below is for people who want to fork, self-host, or contribute.
 
 ---
 
-## Project layout
+### Host your own copy (optional)
+
+The tool is plain HTML/CSS/JS under `docs/` — no build step, no backend.
+
+1. [Fork this repo](https://github.com/cyberresearch-us/android-debloat-advisor/fork) or [create a new one](https://github.com/new) and push:
+   ```bash
+   git clone https://github.com/cyberresearch-us/android-debloat-advisor.git
+   cd android-debloat-advisor
+   git remote set-url origin https://github.com/<you>/<your-repo>.git
+   git push -u origin main
+   ```
+2. On GitHub: **Settings → Pages → Source**: branch **main**, folder **`/docs`** → **Save**.
+3. Your site is live at `https://<you>.github.io/<your-repo>/` in about 60 seconds.
+
+### Contributing rules
+
+Rules live in `data/rules.json`. After editing, sync the copy used by GitHub Pages:
+
+```powershell
+.\scripts\sync-rules.ps1
+```
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for details on adding packages, prefixes, and categories.
+
+### Security and CI
+
+GitHub Actions (`.github/workflows/ci.yml`) runs on every push and PR:
+
+| Check | Tool |
+|-------|------|
+| Rules files in sync | `cmp` |
+| Filesystem scan | [Trivy v0.35](https://github.com/aquasecurity/trivy-action) |
+| Secret detection | [Gitleaks v2](https://github.com/gitleaks/gitleaks-action) |
+
+See [SECURITY.md](SECURITY.md) for the threat model and local scan instructions.
+
+### Project layout
 
 ```
 android-debloat-advisor/
-├── .github/
-│   ├── dependabot.yml          Monthly Actions version bumps
-│   └── workflows/ci.yml        Rules sync + Trivy + Gitleaks
-├── data/
-│   └── rules.json              Edit rules here
-├── docs/                       ← GitHub Pages root
-│   ├── index.html              Interactive advisor
-│   ├── device-setup.html       Full phone + ADB setup guide
-│   ├── family-link.html        Parental controls notes
-│   ├── family-link.md
-│   └── data/
-│       └── rules.json          Copy of rules (keep in sync)
+├── docs/                        ← GitHub Pages root
+│   ├── index.html               Interactive advisor
+│   ├── device-setup.html        Full phone + ADB setup guide
+│   ├── family-link.html         Parental controls notes
+│   └── data/rules.json          Suggestion rules (keep in sync)
+├── data/rules.json              Edit rules here
 ├── scripts/
-│   ├── export-packages.ps1     Windows: copy package list to clipboard
-│   ├── export-packages.sh      macOS/Linux clipboard export
-│   └── sync-rules.ps1          Copy data/rules.json → docs/data/rules.json
-├── .gitignore
+│   ├── export-packages.ps1      Windows clipboard export
+│   ├── export-packages.sh       macOS / Linux clipboard export
+│   ├── sync-rules.ps1           Sync rules → docs/data/
+│   └── test-rules.mjs           Offline rule test against a package dump
+├── .github/workflows/ci.yml     Rules sync + Trivy + Gitleaks
 ├── CONTRIBUTING.md
-├── LICENSE                     MIT
-├── README.md
-└── SECURITY.md
+├── SECURITY.md
+└── LICENSE                      MIT
 ```
 
 ---
