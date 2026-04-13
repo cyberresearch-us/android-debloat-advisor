@@ -1,0 +1,71 @@
+name: Device report
+description: Report how the tool worked on your phone so we can improve the rules.
+title: "Device report: [device name]"
+labels: ["device-report"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for testing! This helps us verify rules and add support for more devices.
+
+  - type: input
+    id: device
+    attributes:
+      label: Device name
+      description: e.g. Samsung Galaxy S24, Google Pixel 9, OnePlus 12
+      placeholder: Samsung Galaxy S24
+    validations:
+      required: true
+
+  - type: input
+    id: model
+    attributes:
+      label: Model number
+      description: "Found in Settings > About phone (e.g. SM-S921U, GKI4C)"
+      placeholder: SM-S921U
+    validations:
+      required: true
+
+  - type: input
+    id: android_version
+    attributes:
+      label: Android version
+      description: "Found in Settings > About phone > Software information"
+      placeholder: "15"
+    validations:
+      required: true
+
+  - type: input
+    id: skin_version
+    attributes:
+      label: Manufacturer skin version (if any)
+      description: "e.g. One UI 7, OxygenOS 15, stock Android"
+      placeholder: One UI 7
+
+  - type: textarea
+    id: package_list
+    attributes:
+      label: Package list (optional but very helpful)
+      description: |
+        Paste the output of `adb shell pm list packages -f`.
+        This helps us verify rules against real device data.
+      render: text
+
+  - type: textarea
+    id: wrong_suggestions
+    attributes:
+      label: Wrong or missing suggestions
+      description: |
+        List any packages where the tool gave a wrong suggestion:
+        - Package marked "remove" that should be "keep"
+        - Package marked "keep" that should be "remove"
+        - Package not recognized that should have a rule
+      placeholder: |
+        - com.example.package was suggested "remove" but it broke [feature]
+        - com.example.other was not recognized, should be "remove" (it's bloatware)
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Additional notes
+      description: Anything else — packages you restored, issues you hit, etc.

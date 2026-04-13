@@ -52,6 +52,22 @@ Removing apps is a good start, but it does **not** block the internet or prevent
 **[Family Link setup guide and checklist](https://cyberresearch-us.github.io/android-debloat-advisor/family-link.html)**
 
 ---
+
+## Tested devices
+
+| Device | Model | Android | Status |
+|--------|-------|---------|--------|
+| Samsung Galaxy S10+ | SM-G975U1 | 12 | **Verified** — full package list tested |
+| Samsung Galaxy S23 / S24 / S25 | — | 14 – 15 (One UI 6/7) | Research-based rules |
+| Google Pixel 8 / 9 | — | 14 – 16 | Research-based rules |
+| OnePlus 12 / 13 | — | 14 – 15 (OxygenOS 14/15) | Research-based rules |
+
+**Verified** means someone ran the tool against a real device and confirmed the results.
+**Research-based** means rules were added from community debloat guides but have not yet been tested on a physical device.
+
+**Have a phone we haven't tested?** [Submit a device report](https://github.com/cyberresearch-us/android-debloat-advisor/issues/new?template=device-report.yml) — it takes 2 minutes and helps everyone.
+
+---
 ---
 
 ## For developers

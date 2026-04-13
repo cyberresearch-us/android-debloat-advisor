@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "description": "Suggestion rules: first matching category wins (except critical is always keep). Prefixes match package name start.",
   "criticalPackages": [
     "android",
@@ -14,7 +14,11 @@
     "com.android.providers.telephony",
     "com.android.providers.settings",
     "com.google.android.networkstack",
-    "com.google.android.packageinstaller"
+    "com.google.android.packageinstaller",
+    "com.android.providers.contacts",
+    "com.android.providers.media",
+    "com.android.launcher3",
+    "com.android.inputmethod.latin"
   ],
   "categories": [
     {
@@ -27,7 +31,35 @@
         "com.samsung.android.incallui",
         "com.samsung.android.dialer",
         "com.sec.imsservice",
-        "com.samsung.advp.imssettings"
+        "com.samsung.advp.imssettings",
+        "com.samsung.android.messaging"
+      ],
+      "prefixes": []
+    },
+    {
+      "id": "critical_oneplus",
+      "label": "Critical (OnePlus / OxygenOS)",
+      "defaultAction": "keep",
+      "reason": "Core OnePlus system components — removing can break launcher, calls, or camera.",
+      "packages": [
+        "net.oneplus.launcher",
+        "com.oneplus.security",
+        "com.oneplus.coreservice",
+        "com.oneplus.camera",
+        "com.oplus.launcher"
+      ],
+      "prefixes": []
+    },
+    {
+      "id": "critical_pixel",
+      "label": "Critical (Google Pixel)",
+      "defaultAction": "keep",
+      "reason": "Core Pixel system components — removing can break launcher, calls, or setup.",
+      "packages": [
+        "com.google.android.apps.nexuslauncher",
+        "com.google.android.dialer",
+        "com.google.android.contacts",
+        "com.google.android.deskclock"
       ],
       "prefixes": []
     },
@@ -45,22 +77,38 @@
       "prefixes": ["com.facebook."]
     },
     {
+      "id": "social_other",
+      "label": "Social — Netflix / streaming stubs",
+      "defaultAction": "remove",
+      "reason": "Pre-installed streaming stubs; safe to remove if you don't use these services.",
+      "packages": [
+        "com.netflix.mediaclient",
+        "com.netflix.partner.activation"
+      ],
+      "prefixes": []
+    },
+    {
       "id": "store_samsung",
       "label": "Samsung Galaxy Store",
       "defaultAction": "remove",
       "reason": "App store; removing blocks Galaxy Store installs/updates for Samsung apps.",
-      "packages": ["com.sec.android.app.samsungapps"],
+      "packages": [
+        "com.sec.android.app.samsungapps",
+        "com.samsung.android.themestore"
+      ],
       "prefixes": []
     },
     {
       "id": "browser_chrome_customization",
       "label": "Browser-related (Samsung + Chrome)",
       "defaultAction": "remove",
-      "reason": "Samsung Chrome customization; safe if you do not rely on it. Does not replace uninstalling Chrome/Samsung Internet themselves.",
+      "reason": "Browsers and browser stubs; safe to remove if you use another browser or want to restrict web access.",
       "packages": [
         "com.sec.android.app.chromecustomizations",
         "com.android.chrome",
-        "com.sec.android.app.sbrowser"
+        "com.sec.android.app.sbrowser",
+        "com.android.browser",
+        "com.android.htmlviewer"
       ],
       "prefixes": []
     },
@@ -68,20 +116,25 @@
       "id": "search_launcher",
       "label": "Search / Finder (can open web)",
       "defaultAction": "review",
-      "reason": "Galaxy Finder integrates search; some parents remove to reduce web entry from launcher.",
-      "packages": ["com.samsung.android.app.galaxyfinder"],
+      "reason": "Galaxy Finder or search widgets can open web results; some parents remove to restrict web access.",
+      "packages": [
+        "com.samsung.android.app.galaxyfinder",
+        "com.google.android.googlequicksearchbox"
+      ],
       "prefixes": []
     },
     {
       "id": "microsoft_stubs",
-      "label": "Microsoft (Phone Link / Office stub)",
+      "label": "Microsoft (Phone Link / Office / OneDrive)",
       "defaultAction": "remove",
-      "reason": "Link to Windows / Office headless; optional on phones.",
+      "reason": "Link to Windows / Office / OneDrive stubs; optional on phones.",
       "packages": [
         "com.microsoft.appmanager",
-        "com.microsoft.office.officehubhl"
+        "com.microsoft.office.officehubhl",
+        "com.microsoft.skydrive",
+        "com.microsoft.launcher.ent"
       ],
-      "prefixes": []
+      "prefixes": ["com.microsoft."]
     },
     {
       "id": "gaming_samsung",
@@ -94,6 +147,27 @@
         "com.samsung.android.game.gos"
       ],
       "prefixes": ["com.samsung.gamedriver."]
+    },
+    {
+      "id": "gaming_google",
+      "label": "Google Play Games",
+      "defaultAction": "remove",
+      "reason": "Google Play Games service; safe to remove if you don't play games.",
+      "packages": [
+        "com.google.android.play.games"
+      ],
+      "prefixes": []
+    },
+    {
+      "id": "gaming_oneplus",
+      "label": "OnePlus Game Space",
+      "defaultAction": "remove",
+      "reason": "OnePlus gaming overlay and installer; safe to remove if you don't game.",
+      "packages": [
+        "com.oneplus.gamespace",
+        "com.oneplus.gameinstaller"
+      ],
+      "prefixes": ["com.oneplus.gamespace."]
     },
     {
       "id": "ar_vr_samsung",
@@ -112,16 +186,44 @@
       "prefixes": []
     },
     {
+      "id": "ar_google",
+      "label": "AR Core (Google)",
+      "defaultAction": "review",
+      "reason": "Google AR framework; some apps (Maps live view, Measure) depend on it. Remove if you don't use AR features.",
+      "packages": [
+        "com.google.ar.core"
+      ],
+      "prefixes": []
+    },
+    {
       "id": "bixby",
-      "label": "Bixby",
+      "label": "Bixby (Samsung)",
       "defaultAction": "remove",
       "reason": "Bixby voice/UI pieces; some removals may need testing on your One UI version.",
       "packages": [
         "com.samsung.android.bixby.agent",
         "com.samsung.android.bixby.service",
         "com.samsung.android.bixby.wakeup",
+        "com.samsung.android.bixby.voiceinput",
+        "com.samsung.android.bixbyvision.framework",
         "com.samsung.systemui.bixby2",
-        "com.samsung.android.app.settings.bixby"
+        "com.samsung.android.app.settings.bixby",
+        "com.samsung.android.app.routines"
+      ],
+      "prefixes": ["com.samsung.android.bixby."]
+    },
+    {
+      "id": "samsung_optional",
+      "label": "Samsung apps (optional)",
+      "defaultAction": "remove",
+      "reason": "Samsung pre-installed apps that are safe to remove; do not affect core phone functionality.",
+      "packages": [
+        "com.samsung.android.tvplus",
+        "com.samsung.android.app.watchmanager",
+        "com.samsung.android.app.tips",
+        "com.samsung.android.scloud",
+        "com.samsung.android.mobileservice",
+        "com.samsung.android.app.spage"
       ],
       "prefixes": []
     },
@@ -139,6 +241,91 @@
       "prefixes": ["com.dsi.ant."]
     },
     {
+      "id": "carrier_bloatware",
+      "label": "Carrier bloatware (Verizon / AT&T / T-Mobile)",
+      "defaultAction": "remove",
+      "reason": "Carrier-installed apps; safe to remove unless you use the carrier's specific features.",
+      "packages": [
+        "com.vzw.hss.myverizon",
+        "com.att.tv",
+        "com.samsung.attvvm",
+        "com.example.tmo"
+      ],
+      "prefixes": ["com.vzw.", "com.att.", "com.tmobile.", "com.sprint."]
+    },
+    {
+      "id": "oneplus_optional",
+      "label": "OnePlus apps (optional)",
+      "defaultAction": "remove",
+      "reason": "OnePlus pre-installed apps that are safe to remove; do not affect core phone functionality.",
+      "packages": [
+        "com.oneplus.membership",
+        "com.oneplus.screenrecord",
+        "com.oneplus.tvcast",
+        "com.oneplus.instant.translation",
+        "com.oneplus.wallpaper",
+        "com.oneplus.gallery",
+        "com.oneplus.applocker",
+        "com.oneplus.appupgrader",
+        "com.oneplus.sound.tuner",
+        "com.oneplus.geoiptime"
+      ],
+      "prefixes": []
+    },
+    {
+      "id": "oneplus_zen",
+      "label": "OnePlus Zen / Focus Mode",
+      "defaultAction": "review",
+      "reason": "Zen Mode and Work Life Balance; useful features for some. Remove only if unused.",
+      "packages": [
+        "com.oneplus.brickmode",
+        "com.oneplus.opwlb"
+      ],
+      "prefixes": []
+    },
+    {
+      "id": "heytap_oplus",
+      "label": "HeyTap / OPLUS cloud services",
+      "defaultAction": "remove",
+      "reason": "OPPO/OnePlus cloud sync and account services; safe to remove if you don't use HeyTap/OPLUS cloud.",
+      "packages": [
+        "com.heytap.cloud",
+        "com.heytap.mcs",
+        "com.heytap.openid"
+      ],
+      "prefixes": ["com.heytap."]
+    },
+    {
+      "id": "pixel_optional",
+      "label": "Pixel apps (optional)",
+      "defaultAction": "review",
+      "reason": "Pixel-specific extras; safe to remove but some users find them useful.",
+      "packages": [
+        "com.google.android.apps.tips",
+        "com.google.android.apps.wallpaper",
+        "com.google.pixel.livewallpaper",
+        "com.google.android.apps.weather",
+        "com.google.android.apps.recorder",
+        "com.google.android.as"
+      ],
+      "prefixes": []
+    },
+    {
+      "id": "google_entertainment",
+      "label": "Google entertainment (Music / TV / Books)",
+      "defaultAction": "remove",
+      "reason": "Google entertainment apps; safe to remove and can be reinstalled from Play Store.",
+      "packages": [
+        "com.google.android.videos",
+        "com.google.android.youtube",
+        "com.google.android.apps.youtube.music",
+        "com.google.android.music",
+        "com.google.android.apps.books",
+        "com.google.android.apps.magazines"
+      ],
+      "prefixes": []
+    },
+    {
       "id": "google_optional",
       "label": "Google apps (optional)",
       "defaultAction": "review",
@@ -148,10 +335,21 @@
         "com.google.android.apps.maps",
         "com.google.android.apps.docs",
         "com.google.android.apps.photos",
-        "com.google.android.videos",
-        "com.google.android.youtube",
         "com.google.android.apps.tachyon",
-        "com.google.android.apps.dynamite"
+        "com.google.android.apps.dynamite",
+        "com.google.android.calendar",
+        "com.google.android.keep",
+        "com.google.android.apps.wellbeing"
+      ],
+      "prefixes": []
+    },
+    {
+      "id": "google_assistant",
+      "label": "Google Assistant",
+      "defaultAction": "review",
+      "reason": "Google voice assistant; safe to disable but some users rely on it for hands-free features.",
+      "packages": [
+        "com.google.android.apps.googleassistant"
       ],
       "prefixes": []
     },
