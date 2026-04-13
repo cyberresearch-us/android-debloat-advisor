@@ -138,6 +138,21 @@ android-debloat-advisor/
 
 This project was built with AI assistance from [Claude](https://claude.ai/) (Anthropic) via [Cursor](https://cursor.com/). Code, rules, documentation, and prompts were pair-programmed in conversation.
 
+### Sources used for package rules
+
+The bloatware classifications in `data/rules.json` were informed by these community resources:
+
+- [Remove Samsung Bloatware Using ADB — No Root](https://www.samflux.com/2026/04/remove-samsung-bloatware-using-adb-no.html) (SamFlux, 2026)
+- [Galaxy S24 Debloat Script](https://github.com/Tom4tot/Galaxy-S24-Debloat-Script) (Tom4tot)
+- [debloat-samsung-ADB-shizuku](https://github.com/Achno/debloat-samsung-ADB-shizuku) (Achno)
+- [How to Safely Remove Samsung Bloatware without Root](https://thedroidguru.com/how-to-safely-remove-samsung-bloatware-without-root/) (The Droid Guru, 2025)
+- [Pixel 8 Safe Debloat Guide](https://xdaforums.com/t/pixel-8-stock-android-16-safe-debloat-guide.4784628/) (XDA Forums)
+- [Debloat Google and system apps and services](https://xdaforums.com/t/debloat-google-and-system-apps-and-services.4687014/) (XDA Forums)
+- [6 bloatware apps I always uninstall from my Google Pixel](https://www.xda-developers.com/bloatware-apps-i-always-uninstall-from-my-google-pixel-right-away/) (XDA Developers)
+- [OnePlus Bloatware List — Debloat OnePlus without Root](https://technastic.com/oneplus-bloatware-list-oxygen-os-debloater/) (Technastic)
+- [How to Debloat OnePlus 12 via ADB](https://droidwin.com/how-to-debloat-uninstall-bloatware-from-oneplus-12-via-adb/) (DroidWin)
+- [Universal Android Debloater — Debloat Lists](https://github.com/Universal-Debloater-Alliance/universal-android-debloater-next-generation/wiki/Debloat-Lists) (Universal Debloater Alliance)
+
 ---
 
 ## License
