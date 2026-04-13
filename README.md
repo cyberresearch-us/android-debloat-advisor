@@ -49,7 +49,7 @@ The advisor marks critical packages (dialer, home screen, Play Services, etc.) a
 
 Removing apps is a good start, but it does **not** block the internet or prevent new installs. Pair this tool with **Google Family Link** for app approval, web filtering, and screen time.
 
-See [Family Link — get started](https://families.google.com/familylink/) and the [setup instructions](https://support.google.com/families/answer/7107346).
+See [Family Link — get started](https://families.google.com/familylink/) and the [setup instructions](https://support.google.com/families/answer/7101025).
 
 ---
 
