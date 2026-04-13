@@ -349,11 +349,7 @@
         <label class="filter"><input type="radio" name="os" value="win" checked /> Windows (PowerShell)</label>
         <label class="filter"><input type="radio" name="os" value="unix" /> macOS / Linux</label>
       </div>
-      <div class="row" style="margin-bottom: 0.75rem;">
-        <label class="filter"><input type="radio" name="ex" value="system" checked /> <code>pm uninstall -k --user 0</code> (system / typical debloat)</label>
-        <label class="filter"><input type="radio" name="ex" value="user" /> <code>pm uninstall --user 0</code> (user installs, no -k)</label>
-        <label class="filter"><input type="radio" name="ex" value="mixed" /> Mixed (guess from path: /data/app → user, else -k)</label>
-      </div>
+      <p style="color:var(--muted);font-size:0.82rem;margin:0 0 0.5rem;">Commands use <code>-k</code> (keep app data) so you can restore easily if needed.</p>
       <textarea id="exportOut" readonly></textarea>
       <div class="row">
         <button type="button" class="primary" id="btnCopy">Copy to clipboard</button>
@@ -605,23 +601,15 @@
       if ([...sel.options].some((o) => o.value === cur)) sel.value = cur;
     }
 
-    function isUserDataPath(path) {
-      return path.includes("/data/app/");
-    }
-
-    function lineForPackage(pkg, path, mode) {
+    function lineForPackage(pkg) {
       const os = document.querySelector('input[name="os"]:checked').value;
       const adb = os === "win" ? ".\\adb.exe" : "adb";
-      if (mode === "system") return `${adb} shell pm uninstall -k --user 0 ${pkg}`;
-      if (mode === "user") return `${adb} shell pm uninstall --user 0 ${pkg}`;
-      if (isUserDataPath(path)) return `${adb} shell pm uninstall --user 0 ${pkg}`;
       return `${adb} shell pm uninstall -k --user 0 ${pkg}`;
     }
 
     function refreshExport() {
-      const mode = document.querySelector('input[name="ex"]:checked').value;
       const selected = rows.filter((r) => r.removeChecked && !r.critical);
-      const lines = selected.map((r) => lineForPackage(r.package, r.path, mode));
+      const lines = selected.map((r) => lineForPackage(r.package));
       const header =
         "# Android Package Advisor export\n# Review before running. Phone must be connected with USB debugging.\n\n";
       document.getElementById("exportOut").value =
@@ -699,7 +687,6 @@
     document.getElementById("filterCat").addEventListener("change", renderTable);
     document.getElementById("filterAction").addEventListener("change", renderTable);
     document.getElementById("searchPkg").addEventListener("input", renderTable);
-    document.querySelectorAll('input[name="ex"]').forEach((el) => el.addEventListener("change", refreshExport));
     document.querySelectorAll('input[name="os"]').forEach((el) => el.addEventListener("change", refreshExport));
 
     document.getElementById("btnSelectSuggested").addEventListener("click", () => {
