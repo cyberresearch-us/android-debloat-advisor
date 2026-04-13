@@ -27,7 +27,9 @@ You need a computer, a USB cable, and 10 minutes.
 | **5. Review suggestions** | Every package gets a label: **Remove**, **Keep**, or **Review**. Adjust the checkboxes to match what you want. |
 | **6. Copy and run** | Click **Copy to clipboard**, paste the commands back into your terminal. Done. |
 
-**Never done this before?** The **[full device setup guide](https://cyberresearch-us.github.io/android-debloat-advisor/device-setup.html)** walks through every step with screenshots — from tapping Build Number 7 times to running your first command.
+**Never done this before?** The **[full device setup guide](https://cyberresearch-us.github.io/android-debloat-advisor/device-setup.html)** walks through every step — from tapping Build Number 7 times to running your first command.
+
+**Want an AI to do it for you?** If you use Cursor, Windsurf, Claude Code, or any AI coding tool with terminal access, paste our **[ready-made prompt](https://cyberresearch-us.github.io/android-debloat-advisor/ai-prompt.html)** and let the AI handle the technical steps. You just review and approve.
 
 ---
 

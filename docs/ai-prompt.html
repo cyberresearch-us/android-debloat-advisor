@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI Prompt — Android Package Advisor</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 44rem; margin: 2rem auto; padding: 0 1rem; line-height: 1.6; color: #1a1a1a; }
+    h1 { font-size: 1.4rem; }
+    h2 { font-size: 1.1rem; margin-top: 2rem; border-bottom: 1px solid #e0e0e0; padding-bottom: 0.3rem; }
+    code { background: #f3f3f3; padding: 0.1em 0.35em; border-radius: 4px; font-size: 0.88em; }
+    a { color: #0b57d0; }
+    .back { font-size: 0.9rem; margin-bottom: 1.5rem; }
+    .prompt-box {
+      position: relative;
+      background: #f8f9fa;
+      border: 1px solid #d0d7de;
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      font-family: ui-monospace, "Cascadia Code", monospace;
+      font-size: 0.82rem;
+      white-space: pre-wrap;
+      line-height: 1.55;
+      margin: 1rem 0;
+    }
+    .copy-btn {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      background: #0b57d0;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 0.35rem 0.75rem;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+    .copy-btn:hover { background: #0842a0; }
+    .tip  { background: #e8f5e9; border-left: 4px solid #388e3c; padding: 0.65rem 0.85rem; border-radius: 0 8px 8px 0; font-size: 0.9rem; margin: 1rem 0; }
+    ul, ol { padding-left: 1.3rem; }
+    li { margin-bottom: 0.4rem; }
+  </style>
+</head>
+<body>
+  <p class="back"><a href="index.html">&larr; Back to Package Advisor</a></p>
+  <h1>Let an AI do it for you</h1>
+  <p>
+    If you use an AI coding tool with terminal access &mdash;
+    <strong>Cursor</strong>, <strong>Windsurf</strong>, <strong>Claude Code</strong>,
+    <strong>GitHub Copilot in VS Code</strong>, or similar &mdash;
+    paste the prompt below and let the AI handle everything. You just review and approve.
+  </p>
+
+  <h2>Requirements</h2>
+  <ul>
+    <li>Phone connected via USB with <strong>USB debugging</strong> enabled (<a href="device-setup.html">setup guide</a>).</li>
+    <li><strong>ADB</strong> installed on your computer (the AI can help install it too).</li>
+    <li>An AI coding tool that can run terminal commands.</li>
+  </ul>
+
+  <h2>The prompt</h2>
+  <p>Click <strong>Copy</strong> and paste into your AI assistant:</p>
+
+  <div class="prompt-box" id="promptBox"><button class="copy-btn" id="copyBtn" type="button">Copy</button>I have an Android phone connected to this computer via USB with USB debugging enabled.
+ADB (Android Debug Bridge) should be installed. If not, help me install it.
+
+Please do the following:
+
+1. Run "adb devices" to confirm the phone is connected and authorized.
+   If it shows "unauthorized", tell me to check the phone screen and tap Allow.
+
+2. Run "adb shell pm list packages -f" to export every installed package.
+
+3. Classify each package into one of these categories:
+   - REMOVE: Bloatware, social media, pre-installed apps I likely don't use
+     (Facebook, Microsoft stubs, Samsung Game tools, AR/VR, Bixby,
+     Galaxy Store, ANT+, carrier bloat).
+   - KEEP: Critical system packages that will break the phone if removed
+     (launcher, dialer, in-call UI, IMS, Play Services, Google Services
+     Framework, WebView, permission controller, Settings, SystemUI,
+     telephony providers, package installer).
+   - REVIEW: Everything else — present these so I can decide.
+
+4. Show me the results organized by category in a table.
+   For each package show: package name, what it is, and your suggestion.
+
+5. Ask me to confirm which packages to remove. Wait for my response.
+   Do NOT run any uninstall commands until I approve.
+
+6. For packages I approve, generate and run the commands using:
+   - System/preloaded apps: adb shell pm uninstall -k --user 0 &lt;package&gt;
+   - User-installed apps (under /data/app): adb shell pm uninstall --user 0 &lt;package&gt;
+
+7. After running, tell me how to test (make a call, open camera, check
+   notifications) and remind me that I can restore any package with:
+   adb shell cmd package install-existing &lt;package&gt;
+
+Important rules:
+- NEVER remove a package without my explicit approval.
+- NEVER remove com.google.android.webview — it is NOT a browser, many apps need it.
+- NEVER remove the launcher unless I have installed an alternative and set it as default.
+- If you are unsure about a package, classify it as REVIEW, not REMOVE.
+- This phone is for a child. Remove anything that enables web browsing,
+  social media, gaming, streaming video/music, or app stores other than
+  Play Store. Keep email, maps, calendar, camera, phone, and messages.
+  (Delete or edit this line if the phone is not for a child.)</div>
+
+  <div class="tip">
+    <strong>Customize it:</strong>
+    Not for a child? Delete the last line.
+    Want to keep specific apps? Add: "Keep these apps: Zoom, Duolingo, Google Photos."
+    Know your device? Add: "The phone is a Samsung Galaxy S10+ running Android 12."
+  </div>
+
+  <h2>What to expect</h2>
+  <ol>
+    <li>The AI checks the USB connection.</li>
+    <li>Pulls the full package list (typically 300&ndash;500 lines).</li>
+    <li>Presents a categorized table for you to review.</li>
+    <li>Waits for your go-ahead before touching anything.</li>
+    <li>Runs only the commands you approved.</li>
+    <li>Tells you how to verify and how to undo.</li>
+  </ol>
+  <p>The whole process takes about 5&ndash;10 minutes. You stay in control the entire time.</p>
+
+  <script>
+    document.getElementById("copyBtn").addEventListener("click", async () => {
+      const box = document.getElementById("promptBox");
+      const text = box.textContent.replace(/^Copy/, "").trim();
+      await navigator.clipboard.writeText(text);
+      const btn = document.getElementById("copyBtn");
+      btn.textContent = "Copied!";
+      setTimeout(() => btn.textContent = "Copy", 1500);
+    });
+  </script>
+</body>
+</html>
