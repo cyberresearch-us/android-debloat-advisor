@@ -116,27 +116,182 @@
       margin-bottom: 1rem;
     }
     footer { padding: 1rem 1.5rem; color: var(--muted); font-size: 0.8rem; text-align: center; border-top: 1px solid var(--border); }
+    .guide { margin-bottom: 1rem; }
+    .guide .step-grid {
+      display: grid;
+      grid-template-columns: 2.2rem 1fr;
+      gap: 0.15rem 0.75rem;
+      margin: 0.75rem 0;
+    }
+    .guide .step-num {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 2rem;
+      height: 2rem;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.85rem;
+      flex-shrink: 0;
+    }
+    .guide .step-body { padding-top: 0.25rem; }
+    .guide .step-body strong { color: var(--text); }
+    .guide .step-body p { margin: 0.15rem 0 0.6rem; color: var(--muted); font-size: 0.88rem; }
+    details.howto {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin: 0.5rem 0;
+      font-size: 0.85rem;
+    }
+    details.howto summary {
+      cursor: pointer;
+      padding: 0.55rem 0.85rem;
+      color: var(--accent);
+      font-weight: 600;
+      list-style: none;
+    }
+    details.howto summary::before { content: "▸ "; }
+    details.howto[open] summary::before { content: "▾ "; }
+    details.howto .detail-body { padding: 0 0.85rem 0.75rem; color: var(--muted); line-height: 1.6; }
+    details.howto .detail-body ol { padding-left: 1.2rem; }
+    details.howto .detail-body li { margin-bottom: 0.3rem; }
+    details.howto .detail-body code { background: rgba(255,255,255,0.06); padding: 0.1em 0.35em; border-radius: 4px; font-size: 0.88em; }
+    details.howto .detail-body .cmd {
+      display: block;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.45rem 0.65rem;
+      margin: 0.4rem 0;
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      color: var(--text);
+      word-break: break-all;
+    }
+    .or-divider { text-align: center; color: var(--muted); font-size: 0.8rem; margin: 0.5rem 0; }
   </style>
 </head>
 <body>
   <header>
     <h1>Android Package Advisor</h1>
     <p>
-      Paste <code>adb shell pm list packages -f</code> output, review suggestions, then export uninstall commands.
-      <a href="device-setup.html">Device setup guide</a> &nbsp;·&nbsp;
+      Remove bloatware from Android phones — safely, with suggestions you review before anything runs.
+      &nbsp;
       <a href="ai-prompt.html">Let an AI do it</a> &nbsp;·&nbsp;
-      <a href="family-link.html">Family Link notes</a>
+      <a href="device-setup.html">Full setup guide</a> &nbsp;·&nbsp;
+      <a href="family-link.html">Parental controls</a>
     </p>
   </header>
   <main>
     <div class="callout">
-      <strong>Disclaimer:</strong> Suggestions are heuristic. Wrong removals can break your device. Restore with
-      <code>adb shell cmd package install-existing &lt;package&gt;</code> when the package still exists on the system image.
+      <strong>Safe and reversible.</strong> Commands generated here use <code>pm uninstall -k --user 0</code> which
+      disables an app for your profile but keeps the file on the phone. Restore any time with
+      <code>adb shell cmd package install-existing &lt;package&gt;</code>.
     </div>
 
+    <section class="guide">
+      <h2>How it works</h2>
+      <p style="color: var(--muted); font-size: 0.88rem; margin: 0 0 0.5rem;">
+        You need a computer, a USB cable, and about 10 minutes. Follow the steps below, or
+        <a href="ai-prompt.html">paste our prompt into an AI tool</a> and let it do the technical parts.
+      </p>
+      <div class="step-grid">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <strong>Turn on Developer Mode on the phone</strong>
+          <p>This unlocks USB debugging so your computer can talk to the phone.</p>
+          <details class="howto">
+            <summary>Show me how (Samsung / most Android)</summary>
+            <div class="detail-body">
+              <ol>
+                <li>Open <strong>Settings</strong>.</li>
+                <li>Scroll down, tap <strong>About phone</strong>.</li>
+                <li>Tap <strong>Software information</strong>.</li>
+                <li>Find <strong>Build number</strong> and tap it <strong>7 times</strong> quickly.</li>
+                <li>Enter your PIN if asked.</li>
+                <li>You'll see: <em>"Developer mode has been enabled."</em></li>
+                <li>Go back to Settings — <strong>Developer options</strong> now appears near the bottom.</li>
+                <li>Open it, scroll to <strong>Debugging</strong>, turn on <strong>USB debugging</strong>, tap <strong>OK</strong>.</li>
+              </ol>
+            </div>
+          </details>
+        </div>
+
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <strong>Install ADB on your computer</strong>
+          <p>ADB (Android Debug Bridge) is a small tool from Google — no Android Studio needed.</p>
+          <details class="howto">
+            <summary>Windows</summary>
+            <div class="detail-body">
+              <ol>
+                <li>Download <a href="https://developer.android.com/studio/releases/platform-tools" target="_blank">Platform Tools ZIP</a> from Google.</li>
+                <li>Extract it to a folder like <code>C:\platform-tools</code>.</li>
+                <li>Open that folder, hold <strong>Shift</strong>, right-click blank space, choose <strong>Open PowerShell window here</strong>.</li>
+                <li>Type: <code class="cmd">.\adb.exe --version</code> — you should see "Android Debug Bridge version…"</li>
+              </ol>
+            </div>
+          </details>
+          <details class="howto">
+            <summary>macOS</summary>
+            <div class="detail-body">
+              <ol>
+                <li>Install via Homebrew: <code class="cmd">brew install android-platform-tools</code></li>
+                <li>Or download the ZIP from the same Google link above and extract.</li>
+                <li>Open Terminal, run: <code class="cmd">adb version</code></li>
+              </ol>
+            </div>
+          </details>
+          <details class="howto">
+            <summary>Linux</summary>
+            <div class="detail-body">
+              <ol>
+                <li><code class="cmd">sudo apt install adb</code> (Debian/Ubuntu) or <code class="cmd">sudo dnf install android-tools</code> (Fedora)</li>
+                <li>Or download from Google and extract.</li>
+                <li>Run: <code class="cmd">adb version</code></li>
+              </ol>
+            </div>
+          </details>
+        </div>
+
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <strong>Connect the phone and get the package list</strong>
+          <p>Plug in the USB cable. Accept the "Allow USB debugging?" prompt on the phone if it appears.</p>
+          <details class="howto">
+            <summary>Show me the commands</summary>
+            <div class="detail-body">
+              <p>First, verify the phone is connected:</p>
+              <code class="cmd">adb devices</code>
+              <p>You should see your device listed as <code>device</code> (not <code>unauthorized</code>).</p>
+              <p>Then run this to get the package list:</p>
+              <code class="cmd">adb shell pm list packages -f</code>
+              <p>This prints hundreds of lines — that is normal. To copy it all to your clipboard:</p>
+              <p><strong>Windows PowerShell:</strong></p>
+              <code class="cmd">.\adb.exe shell pm list packages -f | Set-Clipboard</code>
+              <p><strong>macOS Terminal:</strong></p>
+              <code class="cmd">adb shell pm list packages -f | pbcopy</code>
+              <p><strong>Linux:</strong></p>
+              <code class="cmd">adb shell pm list packages -f | xclip -sel clip</code>
+              <p>Now paste it into the box below.</p>
+            </div>
+          </details>
+        </div>
+
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <strong>Paste, analyze, review, and export</strong>
+          <p>Paste the output below, click <strong>Analyze</strong>, adjust the checkboxes, then copy the commands and run them in your terminal.</p>
+        </div>
+      </div>
+    </section>
+
     <section>
-      <h2>1. Package list</h2>
-      <textarea id="input" placeholder="package:/system/app/Example/Example.apk=com.example.app"></textarea>
+      <h2>Paste package list here</h2>
+      <textarea id="input" placeholder="Paste the output of: adb shell pm list packages -f&#10;&#10;It looks like:&#10;package:/system/app/Example/Example.apk=com.example.app&#10;package:/system/priv-app/Another/Another.apk=com.example.another"></textarea>
       <div class="row">
         <button type="button" class="primary" id="btnAnalyze">Analyze</button>
         <button type="button" id="btnLoadDemo">Load demo snippet</button>
@@ -145,7 +300,7 @@
     </section>
 
     <section id="resultsSection" hidden>
-      <h2>2. Review packages</h2>
+      <h2>Review packages</h2>
       <div class="toolbar">
         <label class="filter">Filter</label>
         <select id="filterCat">
@@ -180,7 +335,7 @@
     </section>
 
     <section id="exportSection" hidden>
-      <h2>3. Export commands</h2>
+      <h2>Export commands</h2>
       <div class="row" style="margin-bottom: 0.75rem;">
         <label class="filter"><input type="radio" name="ex" value="system" checked /> <code>pm uninstall -k --user 0</code> (system / typical debloat)</label>
         <label class="filter"><input type="radio" name="ex" value="user" /> <code>pm uninstall --user 0</code> (user installs, no -k)</label>
@@ -192,9 +347,25 @@
         <button type="button" id="btnRefreshExport">Refresh export</button>
       </div>
     </section>
+    <section id="runSection" hidden>
+      <h2>What to do next</h2>
+      <ol style="color: var(--muted); font-size: 0.88rem; line-height: 1.7; padding-left: 1.2rem;">
+        <li>Make sure the phone is still connected: <code>adb devices</code></li>
+        <li>Paste the commands above into your terminal (PowerShell, Terminal, or Command Prompt).</li>
+        <li>Each command prints <code>Success</code> or <code>Failure</code>.</li>
+        <li>Test the phone — make a call, open the camera, send a text.</li>
+        <li>If something broke, restore it immediately:
+          <code style="display:block; margin: 0.3rem 0;">adb shell cmd package install-existing com.example.package</code>
+        </li>
+        <li>When you're done, turn off USB debugging:
+          <strong>Settings → Developer options → USB debugging → OFF</strong>.
+        </li>
+      </ol>
+    </section>
   </main>
   <footer>
-    MIT · Rules live in <code>docs/data/rules.json</code> — PRs welcome · Not affiliated with Google or Samsung
+    MIT · <a href="https://github.com/cyberresearch-us/android-debloat-advisor">Source on GitHub</a> ·
+    Rules in <code>data/rules.json</code> — PRs welcome · Not affiliated with Google or Samsung
   </footer>
 
   <script>
@@ -395,6 +566,7 @@
 
       document.getElementById("resultsSection").hidden = pkgs.length === 0;
       document.getElementById("exportSection").hidden = pkgs.length === 0;
+      document.getElementById("runSection").hidden = pkgs.length === 0;
       populateCategoryFilter();
       renderTable();
       refreshExport();
