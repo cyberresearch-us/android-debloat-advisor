@@ -365,7 +365,9 @@
       <ol style="color: var(--muted); font-size: 0.88rem; line-height: 1.7; padding-left: 1.2rem;">
         <li>Make sure the phone is still connected. Run <code>.\adb.exe devices</code> (Windows) or <code>adb devices</code> (macOS/Linux).</li>
         <li>Paste the commands above into PowerShell (Windows) or Terminal (macOS/Linux). Do <strong>not</strong> run <code>adb shell</code> first — paste them directly.</li>
-        <li>Each command prints <code>Success</code> or <code>Failure</code>.</li>
+        <li>Each command prints <code>Success</code> or <code>Failure</code>.
+          <br><strong style="color:var(--warn);">Note:</strong> Some packages report "Success" but reappear on the next scan. This is normal — certain manufacturer-protected apps resist removal and cannot be fully uninstalled without root access. You can safely ignore these.
+        </li>
         <li>Test the phone — make a call, open the camera, send a text.</li>
         <li>If something broke, restore it immediately:
           <code style="display:block; margin: 0.3rem 0;">.\adb.exe shell cmd package install-existing com.example.package</code>
