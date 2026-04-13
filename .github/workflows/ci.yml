@@ -15,7 +15,7 @@ jobs:
     name: Rules JSON in sync
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Compare data/rules.json and docs/data/rules.json
         run: |
           if ! cmp -s data/rules.json docs/data/rules.json; then
@@ -29,7 +29,7 @@ jobs:
     name: Trivy filesystem scan
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Run Trivy (repo root)
         uses: aquasecurity/trivy-action@v0.35.0
         with:
@@ -43,7 +43,7 @@ jobs:
     name: Gitleaks
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
       - uses: gitleaks/gitleaks-action@v2
