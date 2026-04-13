@@ -23,3 +23,13 @@ Pull requests run:
 - **Gitleaks** (accidental secret commits).
 
 These tools reduce accidental leaks; they are not a full application penetration test.
+
+## Local scans (optional)
+
+If you have [Docker](https://docs.docker.com/get-docker/):
+
+```bash
+docker run --rm -v "$PWD":/repo aquasecurity/trivy:latest fs --severity HIGH,CRITICAL /repo
+```
+
+Install [Gitleaks](https://github.com/gitleaks/gitleaks) and run `gitleaks detect --source . --verbose` before pushing.
