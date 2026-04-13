@@ -52,6 +52,41 @@
     .tip  { background: var(--tip-bg); border-left: 4px solid var(--tip-text); color: var(--tip-text); padding: 0.65rem 0.85rem; border-radius: 0 8px 8px 0; font-size: 0.9rem; margin: 1rem 0; }
     ul, ol { padding-left: 1.3rem; }
     li { margin-bottom: 0.4rem; }
+    details.howto {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin: 0.5rem 0;
+      font-size: 0.85rem;
+    }
+    details.howto summary {
+      cursor: pointer;
+      padding: 0.55rem 0.85rem;
+      color: var(--accent);
+      font-weight: 600;
+      list-style: none;
+    }
+    details.howto summary::before { content: "▸ "; }
+    details.howto[open] summary::before { content: "▾ "; }
+    details.howto .detail-body { padding: 0 0.85rem 0.75rem; color: var(--muted); line-height: 1.6; }
+    details.howto .detail-body ol { padding-left: 1.2rem; }
+    details.howto .detail-body li { margin-bottom: 0.3rem; }
+    details.howto .detail-body code { background: rgba(255,255,255,0.06); padding: 0.1em 0.35em; border-radius: 4px; font-size: 0.88em; }
+    details.howto .detail-body .cmd {
+      display: block;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.45rem 0.65rem;
+      margin: 0.4rem 0;
+      font-family: ui-monospace, "Cascadia Code", monospace;
+      font-size: 0.82rem;
+      color: var(--text);
+      word-break: break-all;
+    }
+    .req-item { margin-bottom: 0.75rem; }
+    .req-item > strong { color: var(--text); display: block; margin-bottom: 0.15rem; }
+    .req-item > p { color: var(--muted); font-size: 0.88rem; margin: 0.15rem 0 0.35rem; }
   </style>
 </head>
 <body>
@@ -64,12 +99,85 @@
     paste the prompt below and let the AI handle everything. You just review and approve.
   </p>
 
-  <h2>Requirements</h2>
-  <ul>
-    <li>Phone connected via USB with <strong>USB debugging</strong> enabled (<a href="device-setup.html">setup guide</a>).</li>
-    <li><strong>ADB</strong> installed on your computer (the AI can help install it too).</li>
-    <li>An AI coding tool that can run terminal commands.</li>
-  </ul>
+  <h2>Before you start</h2>
+  <p style="color: var(--muted); font-size: 0.88rem; margin: 0 0 0.75rem;">
+    You need three things set up before pasting the prompt. Expand each section if you need help.
+  </p>
+
+  <div class="req-item">
+    <strong>1. USB debugging enabled on the phone</strong>
+    <p>The AI needs to talk to your phone over USB. This requires Developer Mode.</p>
+    <details class="howto">
+      <summary>Show me how to enable USB debugging</summary>
+      <div class="detail-body">
+        <ol>
+          <li>Open <strong>Settings</strong> on the phone.</li>
+          <li>Scroll down, tap <strong>About phone</strong>.</li>
+          <li>Tap <strong>Software information</strong>.</li>
+          <li>Find <strong>Build number</strong> and tap it <strong>7 times</strong> quickly.</li>
+          <li>Enter your PIN if asked. You'll see <em>"Developer mode has been enabled."</em></li>
+          <li>Go back to Settings &mdash; <strong>Developer options</strong> now appears near the bottom.</li>
+          <li>Open it, scroll to <strong>Debugging</strong>, turn on <strong>USB debugging</strong>, tap <strong>OK</strong>.</li>
+          <li>Plug the phone into your computer with a USB cable.</li>
+          <li>If a prompt appears on the phone saying <em>"Allow USB debugging?"</em>, tap <strong>Allow</strong>.</li>
+        </ol>
+      </div>
+    </details>
+  </div>
+
+  <div class="req-item">
+    <strong>2. ADB installed on your computer</strong>
+    <p>ADB (Android Debug Bridge) is a small tool from Google. The AI can help install it, but here's how to do it yourself.</p>
+    <details class="howto">
+      <summary>Windows</summary>
+      <div class="detail-body">
+        <ol>
+          <li>Download <a href="https://developer.android.com/studio/releases/platform-tools" target="_blank">Platform Tools ZIP</a> from Google.</li>
+          <li>Extract it to a folder like <code>C:\platform-tools</code>.</li>
+          <li>Open that folder, hold <strong>Shift</strong>, right-click blank space, choose <strong>Open PowerShell window here</strong>.</li>
+          <li>Type: <code class="cmd">.\adb.exe --version</code> &mdash; you should see "Android Debug Bridge version…"</li>
+        </ol>
+      </div>
+    </details>
+    <details class="howto">
+      <summary>macOS</summary>
+      <div class="detail-body">
+        <ol>
+          <li>Install via Homebrew: <code class="cmd">brew install android-platform-tools</code></li>
+          <li>Or download the ZIP from the same Google link above and extract.</li>
+          <li>Open Terminal, run: <code class="cmd">adb version</code></li>
+        </ol>
+      </div>
+    </details>
+    <details class="howto">
+      <summary>Linux</summary>
+      <div class="detail-body">
+        <ol>
+          <li><code class="cmd">sudo apt install adb</code> (Debian/Ubuntu) or <code class="cmd">sudo dnf install android-tools</code> (Fedora)</li>
+          <li>Or download from Google and extract.</li>
+          <li>Run: <code class="cmd">adb version</code></li>
+        </ol>
+      </div>
+    </details>
+  </div>
+
+  <div class="req-item">
+    <strong>3. An AI coding tool with terminal access</strong>
+    <p>Any of these will work:</p>
+    <details class="howto">
+      <summary>Which tools work?</summary>
+      <div class="detail-body">
+        <ul>
+          <li><strong>Cursor</strong> &mdash; open a project folder, use Agent mode (Cmd/Ctrl+I or the chat panel).</li>
+          <li><strong>Windsurf</strong> &mdash; open a terminal, use Cascade.</li>
+          <li><strong>Claude Code</strong> &mdash; run <code>claude</code> from a terminal in the folder where ADB is installed.</li>
+          <li><strong>GitHub Copilot in VS Code</strong> &mdash; use the chat panel with <code>@terminal</code>.</li>
+          <li>Any AI tool that can execute shell/terminal commands on your behalf.</li>
+        </ul>
+        <p>Make sure the AI tool can see the folder where <code>adb</code> is installed, or that <code>adb</code> is on your system PATH.</p>
+      </div>
+    </details>
+  </div>
 
   <h2>The prompt</h2>
   <p>Click <strong>Copy</strong> and paste into your AI assistant:</p>
