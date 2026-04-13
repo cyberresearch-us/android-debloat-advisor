@@ -300,6 +300,10 @@
       </div>
     </section>
 
+    <section id="deviceInfo" hidden style="padding:0.75rem 1rem;border-radius:8px;background:var(--card);border:1px solid var(--border);margin-bottom:0;">
+      <span id="deviceBrand" style="font-size:0.95rem;color:var(--text);"></span>
+    </section>
+
     <section id="resultsSection" hidden>
       <h2>Review packages</h2>
       <div style="margin-bottom: 0.5rem;">
@@ -624,6 +628,31 @@
         lines.length === 0 ? header + "# (no packages selected for removal)" : header + lines.join("\n") + "\n";
     }
 
+    function detectDevice(pkgs) {
+      const names = pkgs.map((p) => p.package);
+      const has = (prefix) => names.some((n) => n.startsWith(prefix));
+      const count = (prefix) => names.filter((n) => n.startsWith(prefix)).length;
+
+      let brand = "Unknown";
+      if (has("com.samsung.") || has("com.sec.")) brand = "Samsung";
+      else if (has("com.google.android.pixel.") || has("com.google.android.apps.pixel.")) brand = "Google Pixel";
+      else if (has("com.oneplus.") || has("net.oneplus.")) brand = "OnePlus";
+      else if (has("com.huawei.") || has("com.hihonor.")) brand = "Huawei / Honor";
+      else if (has("com.xiaomi.") || has("com.miui.")) brand = "Xiaomi";
+      else if (has("com.oppo.") || has("com.coloros.")) brand = "OPPO";
+      else if (has("com.bbk.") || has("com.vivo.")) brand = "Vivo";
+      else if (has("com.motorola.")) brand = "Motorola";
+      else if (has("com.lge.")) brand = "LG";
+      else if (has("com.sony.")) brand = "Sony";
+      else if (has("com.asus.")) brand = "ASUS";
+
+      const total = pkgs.length;
+      const removable = names.filter((n) => { const c = classify(n); return !c.critical && c.suggestion === "remove"; }).length;
+      const critical = names.filter((n) => classify(n).critical).length;
+
+      return { brand, total, removable, critical };
+    }
+
     function analyze() {
       const text = document.getElementById("input").value.trim();
       const pkgs = parseInput(text);
@@ -644,6 +673,19 @@
           rowEl: null,
         };
       });
+
+      const infoEl = document.getElementById("deviceInfo");
+      if (pkgs.length > 0) {
+        const d = detectDevice(pkgs);
+        document.getElementById("deviceBrand").innerHTML =
+          `<strong>Detected device:</strong> ${d.brand} &nbsp;·&nbsp; ` +
+          `${d.total} packages found &nbsp;·&nbsp; ` +
+          `<span style="color:var(--danger)">${d.removable} suggested for removal</span> &nbsp;·&nbsp; ` +
+          `<span style="color:var(--muted)">${d.critical} critical (protected)</span>`;
+        infoEl.hidden = false;
+      } else {
+        infoEl.hidden = true;
+      }
 
       document.getElementById("resultsSection").hidden = pkgs.length === 0;
       document.getElementById("exportSection").hidden = pkgs.length === 0;
