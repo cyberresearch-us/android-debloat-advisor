@@ -99,10 +99,15 @@ Wait for me to say "continue".
 ---
 
 STEP 2 — Check if ADB is installed
-Run: adb version
+First, find out if this is Windows, macOS, or Linux.
+On Windows PowerShell, always use .\adb.exe (with .\), never bare "adb".
+On macOS/Linux, use "adb".
+Admin rights are NOT needed for any of this.
+
+Run: adb version (or .\adb.exe version on Windows PowerShell)
 If it prints a version number, skip to Step 3.
 If it says "not recognized" or "command not found", tell me:
-  - Windows: download Platform Tools from https://developer.android.com/studio/releases/platform-tools, extract to C:\platform-tools, then run: C:\platform-tools\adb.exe version
+  - Windows: download Platform Tools from https://developer.android.com/studio/releases/platform-tools, extract to C:\platform-tools, then run: .\adb.exe version from that folder
   - macOS: run: brew install android-platform-tools
   - Linux: run: sudo apt install adb
 

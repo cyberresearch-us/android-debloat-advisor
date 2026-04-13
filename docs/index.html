@@ -222,9 +222,9 @@
         <div class="step-num">2</div>
         <div class="step-body">
           <strong>Install ADB on your computer</strong>
-          <p>ADB (Android Debug Bridge) is a small tool from Google — no Android Studio needed.</p>
+          <p>ADB (Android Debug Bridge) is a small tool from Google — no Android Studio needed. <strong>Admin rights are not required.</strong></p>
           <details class="howto">
-            <summary>Windows</summary>
+            <summary>Windows (PowerShell)</summary>
             <div class="detail-body">
               <ol>
                 <li>Download <a href="https://developer.android.com/studio/releases/platform-tools" target="_blank">Platform Tools ZIP</a> from Google.</li>
@@ -232,6 +232,7 @@
                 <li>Open that folder, hold <strong>Shift</strong>, right-click blank space, choose <strong>Open PowerShell window here</strong>.</li>
                 <li>Type: <code class="cmd">.\adb.exe --version</code> — you should see "Android Debug Bridge version…"</li>
               </ol>
+              <p><strong>Important:</strong> In PowerShell you must type <code>.\adb.exe</code> (with the <code>.\</code> prefix), not just <code>adb</code>. All Windows commands below use this format.</p>
             </div>
           </details>
           <details class="howto">
@@ -264,11 +265,12 @@
             <summary>Show me the commands</summary>
             <div class="detail-body">
               <p>First, verify the phone is connected:</p>
+              <p><strong>Windows PowerShell:</strong></p>
+              <code class="cmd">.\adb.exe devices</code>
+              <p><strong>macOS / Linux:</strong></p>
               <code class="cmd">adb devices</code>
               <p>You should see your device listed as <code>device</code> (not <code>unauthorized</code>).</p>
-              <p>Then run this to get the package list:</p>
-              <code class="cmd">adb shell pm list packages -f</code>
-              <p>This prints hundreds of lines — that is normal. To copy it all to your clipboard:</p>
+              <p>Then copy the package list to your clipboard:</p>
               <p><strong>Windows PowerShell:</strong></p>
               <code class="cmd">.\adb.exe shell pm list packages -f | Set-Clipboard</code>
               <p><strong>macOS Terminal:</strong></p>
