@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Device Setup — Android Package Advisor</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 44rem; margin: 2rem auto; padding: 0 1rem; line-height: 1.6; color: #1a1a1a; }
+    h1 { font-size: 1.4rem; }
+    h2 { font-size: 1.1rem; margin-top: 2rem; border-bottom: 1px solid #e0e0e0; padding-bottom: 0.3rem; }
+    h3 { font-size: 0.95rem; margin-top: 1.2rem; }
+    code, kbd { background: #f3f3f3; padding: 0.1em 0.35em; border-radius: 4px; font-size: 0.88em; }
+    pre { background: #f3f3f3; padding: 0.75rem 1rem; border-radius: 8px; overflow-x: auto; font-size: 0.85em; }
+    a { color: #0b57d0; }
+    .step { counter-increment: steps; }
+    ol { padding-left: 1.3rem; }
+    li { margin-bottom: 0.4rem; }
+    .warn { background: #fff8e1; border-left: 4px solid #f9a825; padding: 0.65rem 0.85rem; border-radius: 0 8px 8px 0; font-size: 0.9rem; margin: 1rem 0; }
+    .tip  { background: #e8f5e9; border-left: 4px solid #388e3c; padding: 0.65rem 0.85rem; border-radius: 0 8px 8px 0; font-size: 0.9rem; margin: 1rem 0; }
+    .back { font-size: 0.9rem; margin-bottom: 1.5rem; }
+    table { border-collapse: collapse; width: 100%; font-size: 0.88rem; margin: 0.75rem 0; }
+    th, td { padding: 0.4rem 0.6rem; border: 1px solid #ddd; text-align: left; }
+    th { background: #f0f0f0; }
+  </style>
+</head>
+<body>
+  <p class="back"><a href="index.html">← Back to Package Advisor</a></p>
+  <h1>Device Setup Guide</h1>
+  <p>This guide walks you through every step: enabling Developer Options on the phone, installing ADB on your computer, connecting the two, and exporting the package list into the advisor.</p>
+
+  <div class="warn">
+    <strong>What ADB can do here:</strong> The advisor generates <code>pm uninstall -k --user 0</code> commands. These <em>disable</em> apps for user 0 but leave the APK on the system image — they are <strong>reversible</strong>. You run the commands; the advisor never connects to your phone directly.
+  </div>
+
+  <h2>Part 1 — Enable Developer Options on the phone</h2>
+  <p>These steps cover <strong>Samsung One UI</strong> (Android 10–14). Other Android phones are similar; the menus may use slightly different names.</p>
+  <ol>
+    <li>Open <strong>Settings</strong>.</li>
+    <li>Scroll to the bottom and tap <strong>About phone</strong>.</li>
+    <li>Tap <strong>Software information</strong>.</li>
+    <li>Find <strong>Build number</strong> and tap it <strong>7 times</strong> in quick succession.</li>
+    <li>You may be asked for your PIN or pattern.</li>
+    <li>You will see a toast: <em>"Developer mode has been enabled"</em>.</li>
+    <li>Go back to the main Settings screen — you will now see <strong>Developer options</strong> near the bottom (sometimes under <em>General management</em> depending on One UI version).</li>
+  </ol>
+
+  <h2>Part 2 — Enable USB Debugging</h2>
+  <ol>
+    <li>Open <strong>Settings → Developer options</strong>.</li>
+    <li>Make sure the toggle at the top is <strong>ON</strong>.</li>
+    <li>Scroll down to the <strong>Debugging</strong> section.</li>
+    <li>Turn on <strong>USB debugging</strong>.</li>
+    <li>Read the warning and tap <strong>OK</strong>.</li>
+  </ol>
+  <div class="warn">
+    Developer options and USB debugging increase attack surface slightly. Turn USB debugging <strong>off</strong> again when you are finished.
+  </div>
+
+  <h2>Part 3 — Install Android Platform Tools on your computer</h2>
+  <p>Platform Tools is a small download from Google that includes <code>adb.exe</code> (Windows) or <code>adb</code> (macOS/Linux). No Android Studio needed.</p>
+
+  <h3>Windows</h3>
+  <ol>
+    <li>Download from <a href="https://developer.android.com/studio/releases/platform-tools" target="_blank">developer.android.com/studio/releases/platform-tools</a>.</li>
+    <li>Extract the ZIP to a folder you can find easily, e.g. <code>C:\platform-tools</code>.</li>
+    <li>Open <strong>File Explorer</strong>, navigate to that folder, hold <strong>Shift</strong> and <strong>right-click</strong> blank space, choose <strong>Open PowerShell window here</strong>.</li>
+    <li>Confirm ADB is present:<br><pre>.\adb.exe --version</pre>
+    You should see a line like <code>Android Debug Bridge version 1.0.41</code>.</li>
+  </ol>
+
+  <h3>macOS</h3>
+  <ol>
+    <li>Download and extract from the same Google link above, or install via Homebrew:<pre>brew install android-platform-tools</pre></li>
+    <li>Open Terminal and run:<pre>adb version</pre></li>
+  </ol>
+
+  <h3>Linux</h3>
+  <ol>
+    <li>Many distros have it in their package manager:<pre>sudo apt install adb          # Debian / Ubuntu
+sudo dnf install android-tools  # Fedora</pre></li>
+    <li>Or download directly from Google and extract.</li>
+    <li>Confirm with:<pre>adb version</pre></li>
+  </ol>
+
+  <h2>Part 4 — Connect the phone</h2>
+  <ol>
+    <li>Use a <strong>USB-C data cable</strong> (not a charge-only cable — same plug, but cheap cables often skip the data wires).</li>
+    <li>Plug the phone into the computer.</li>
+    <li>On the phone, pull down the notification shade — you will see a USB connection notification. Tap it and choose <strong>File Transfer</strong> (MTP) or <strong>USB debugging</strong>. Either works for ADB.</li>
+    <li>Run:<pre>adb devices</pre>
+    <ul>
+      <li>If this is your first connection you will see a prompt <strong>on the phone</strong>: <em>"Allow USB debugging?"</em>. Tap <strong>Allow</strong> (optionally tick <em>"Always allow from this computer"</em>).</li>
+      <li>Run <code>adb devices</code> again. You should see your device listed as <code>device</code> (not <code>unauthorized</code>).</li>
+    </ul></li>
+  </ol>
+
+  <table>
+    <thead><tr><th>Status shown</th><th>What it means</th></tr></thead>
+    <tbody>
+      <tr><td><code>device</code></td><td>Connected and authorised ✓</td></tr>
+      <tr><td><code>unauthorized</code></td><td>Allow the prompt on the phone screen</td></tr>
+      <tr><td>(nothing listed)</td><td>Cable or driver issue — see troubleshooting below</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Part 5 — Export the package list</h2>
+  <p>Run one of the following commands. It will copy the output to your clipboard so you can paste it into the advisor.</p>
+
+  <h3>Windows PowerShell</h3>
+  <pre>.\adb.exe shell pm list packages -f | Set-Clipboard</pre>
+  <p>Or use the helper script from the repo:<pre>.\scripts\export-packages.ps1</pre></p>
+
+  <h3>macOS / Linux</h3>
+  <pre>adb shell pm list packages -f | pbcopy    # macOS
+adb shell pm list packages -f | xclip -sel clip  # Linux with xclip</pre>
+  <p>Or use the repo script:<pre>bash scripts/export-packages.sh</pre></p>
+
+  <div class="tip">
+    The output looks like:<br>
+    <code>package:/system/priv-app/FBServices/FBServices.apk=com.facebook.services</code><br>
+    There will be a few hundred lines — that is normal.
+  </div>
+
+  <h2>Part 6 — Run the advisor</h2>
+  <ol>
+    <li>Open the <a href="index.html">Package Advisor</a> in your browser.</li>
+    <li>Paste the clipboard contents into the text box.</li>
+    <li>Click <strong>Analyze</strong>.</li>
+    <li>Review the suggestions (green = keep, orange = review, red badge = suggested remove).</li>
+    <li>Adjust checkboxes, then click <strong>Copy to clipboard</strong>.</li>
+    <li>Back in your PowerShell / Terminal window, paste and run the commands (phone still connected).</li>
+  </ol>
+
+  <h2>Part 7 — After running commands</h2>
+  <ul>
+    <li><strong>Test</strong>: make calls, check Messages, camera, Maps — verify nothing broke.</li>
+    <li>If something breaks, restore with:<pre>adb shell cmd package install-existing com.example.package</pre></li>
+    <li>Turn <strong>USB debugging off</strong> again: Settings → Developer options → USB debugging → OFF.</li>
+  </ul>
+
+  <h2>Troubleshooting</h2>
+  <h3>Device not detected</h3>
+  <ul>
+    <li>Try a different USB cable (common cause).</li>
+    <li>Try a different USB port on the PC.</li>
+    <li>Windows: install <a href="https://adb.clockworkmod.com/" target="_blank">Universal ADB Drivers</a>.</li>
+    <li>Make sure USB debugging is still on (screen lock can toggle it off on some devices).</li>
+  </ul>
+  <h3>Still unauthorized after tapping Allow</h3>
+  <ul>
+    <li>Revoke all ADB authorizations: Settings → Developer options → Revoke USB debugging authorizations → then re-connect.</li>
+  </ul>
+  <h3>Failure [not installed for 0]</h3>
+  <p>The package was already removed for this user or was never installed. Safe to ignore.</p>
+</body>
+</html>

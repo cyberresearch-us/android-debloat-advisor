@@ -1,45 +1,115 @@
 # Android Package Advisor
 
-Static tool: paste **`adb shell pm list packages -f`** output, see **suggestions**, tick what to remove, **copy** shell commands.
+A static tool that reads your phone's installed-package list, suggests what is safe to remove vs. keep, and exports the exact shell commands — **no account, no server, no build step**.
 
-**Disclaimer:** Not legal/medical/parental-control advice. Wrong removals can break the device. Restore with `adb shell cmd package install-existing <package>` when the APK still exists on the system image.
+---
 
-## Deploy (GitHub Pages)
+## What it does
 
-1. Push this repo to GitHub.
-2. **Settings → Pages →** Source: **Deploy from branch**, branch **main**, folder **`/docs`**.
-3. Done — no build step. Site: `https://<user>.github.io/<repo>/`.
+1. You paste `adb shell pm list packages -f` output into the site.
+2. Rules in `data/rules.json` label every package: **Remove** / **Keep** / **Review**.
+3. You tick checkboxes to adjust, then copy the `adb shell pm uninstall …` command block.
+4. Run that block on your PC while the phone is connected — done.
 
-Opening `docs/index.html` as a local `file://` URL often blocks loading `rules.json`; use Pages or any static server (e.g. `npx --yes serve docs`).
+> **Disclaimer:** Removing the wrong package can break calling, the home screen, or mobile data. Commands generated here use `pm uninstall -k --user 0` which is **reversible** — the APK stays on the system image. Restore any package with `adb shell cmd package install-existing <package>`.
+
+---
+
+## Deploy to GitHub Pages (zero ops)
+
+1. [Create a new GitHub repository](https://github.com/new) (public or private).
+2. Push this project:
+   ```powershell
+   cd android-debloat-advisor
+   git remote add origin https://github.com/<your-username>/<repo-name>.git
+   git push -u origin main
+   ```
+3. In the repo on GitHub: **Settings → Pages → Build and deployment → Source**:  
+   - **Deploy from branch**  
+   - Branch: **main**  
+   - Folder: **`/docs`**  
+   - Click **Save**.
+4. Wait ~60 seconds. Your site will be live at:  
+   `https://<your-username>.github.io/<repo-name>/`
+
+That is everything. No npm, no Docker, no server.
+
+---
 
 ## Use the app
 
-1. Get a package list from your machine with ADB (see [optional device notes](docs/device-setup.md) or repo `scripts/`).
-2. Open the site → paste → **Analyze** → adjust checkboxes → **Copy** commands → run on your PC.
+See the **[full device setup guide](docs/device-setup.html)** for step-by-step instructions including:
 
-Parental controls: see [docs/family-link.md](docs/family-link.md) / [docs/family-link.html](docs/family-link.html).
+- Enabling Developer Options on Samsung / Android phones
+- Installing ADB on Windows, macOS, or Linux
+- Connecting the phone and authorising USB debugging
+- Exporting the package list to clipboard
+- Running the generated commands safely
+- Troubleshooting common issues
 
-## Project layout
+---
 
-| Path | Purpose |
-|------|--------|
-| `docs/index.html` | UI |
-| `docs/data/rules.json` | Suggestions (must stay in sync with `data/rules.json`) |
-| `data/rules.json` | Edit here, then `.\scripts\sync-rules.ps1` |
-| `.github/workflows/ci.yml` | Rules sync + Trivy + Gitleaks |
+## Contributing rules
+
+Rules live in `data/rules.json`. After editing, sync to `docs/data/rules.json`:
+
+```powershell
+.\scripts\sync-rules.ps1
+```
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for guidance on adding package names, prefixes, and categories.
+
+---
 
 ## Security & CI
 
-See [SECURITY.md](SECURITY.md). Pull requests run filesystem scanning and secret detection.
+GitHub Actions (`.github/workflows/ci.yml`) runs on every push and PR:
 
-## Wild idea: SSH like terminal.shop
+| Check | Tool |
+|-------|------|
+| Rules files in sync | shell `cmp` |
+| Filesystem scan | [Trivy v0.35](https://github.com/aquasecurity/trivy-action) |
+| Secret detection | [Gitleaks v2](https://github.com/gitleaks/gitleaks-action) |
 
-See [docs/ssh-terminal-shop.md](docs/ssh-terminal-shop.md) — fun but **not** the same as static Pages hosting.
+See [SECURITY.md](SECURITY.md) for local scan instructions and the threat model.
 
-## Contributing
+---
 
-[CONTRIBUTING.md](CONTRIBUTING.md)
+## Parental controls
+
+Uninstalling packages is **not** a substitute for parental controls. Read [docs/family-link.html](docs/family-link.html) for Family Link setup and checklist.
+
+---
+
+## Project layout
+
+```
+android-debloat-advisor/
+├── .github/
+│   ├── dependabot.yml          Monthly Actions version bumps
+│   └── workflows/ci.yml        Rules sync + Trivy + Gitleaks
+├── data/
+│   └── rules.json              Edit rules here
+├── docs/                       ← GitHub Pages root
+│   ├── index.html              Interactive advisor
+│   ├── device-setup.html       Full phone + ADB setup guide
+│   ├── family-link.html        Parental controls notes
+│   ├── family-link.md
+│   └── data/
+│       └── rules.json          Copy of rules (keep in sync)
+├── scripts/
+│   ├── export-packages.ps1     Windows: copy package list to clipboard
+│   ├── export-packages.sh      macOS/Linux clipboard export
+│   └── sync-rules.ps1          Copy data/rules.json → docs/data/rules.json
+├── .gitignore
+├── CONTRIBUTING.md
+├── LICENSE                     MIT
+├── README.md
+└── SECURITY.md
+```
+
+---
 
 ## License
 
-MIT — [LICENSE](LICENSE).
+MIT — [LICENSE](LICENSE)

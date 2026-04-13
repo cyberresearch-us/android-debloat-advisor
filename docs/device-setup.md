@@ -1,7 +1,24 @@
-# Device setup (optional reference)
+# Device setup (short reference)
 
-This page is **not** required to use the [web advisor](index.html). You only need a text export of packages.
+Full illustrated guide: open [device-setup.html](device-setup.html) in a browser.
 
-To obtain `adb shell pm list packages -f`, use a computer with [Android Platform Tools](https://developer.android.com/studio/releases/platform-tools) and a device where [USB debugging](https://developer.android.com/studio/command-line/adb#Enabling) is enabled. Official documentation is maintained by Google; see the links above.
+## Quick steps
 
-Repository helper scripts (clipboard export) live under `scripts/` in the repo root.
+1. **Enable Developer Options** — Settings → About phone → Software information → tap **Build number** 7 times.
+2. **Enable USB debugging** — Settings → Developer options → USB debugging → ON.
+3. **Install ADB** on your PC from [developer.android.com/studio/releases/platform-tools](https://developer.android.com/studio/releases/platform-tools).
+4. **Connect** phone via USB data cable → accept the "Allow USB debugging?" prompt on the phone screen.
+5. **Verify**: run `adb devices` — device should show as `device` (not `unauthorized`).
+6. **Export packages** and paste into the advisor:
+   - Windows: `.\adb.exe shell pm list packages -f | Set-Clipboard`
+   - macOS/Linux: `adb shell pm list packages -f | pbcopy`
+
+## Restore a removed package
+
+```
+adb shell cmd package install-existing com.example.package
+```
+
+## After you are done
+
+Turn **USB debugging off** again: Settings → Developer options → USB debugging → OFF.
