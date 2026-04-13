@@ -1,0 +1,178 @@
+{
+  "version": 1,
+  "description": "Suggestion rules: first matching category wins (except critical is always keep). Prefixes match package name start.",
+  "criticalPackages": [
+    "android",
+    "com.google.android.webview",
+    "com.google.android.gms",
+    "com.google.android.gsf",
+    "com.google.android.permissioncontroller",
+    "com.android.phone",
+    "com.android.systemui",
+    "com.android.settings",
+    "com.android.server.telecom",
+    "com.android.providers.telephony",
+    "com.android.providers.settings",
+    "com.google.android.networkstack",
+    "com.google.android.packageinstaller"
+  ],
+  "categories": [
+    {
+      "id": "critical_samsung",
+      "label": "Critical (Samsung / telephony)",
+      "defaultAction": "keep",
+      "reason": "Removing can break calls, mobile data, IMS, or home screen. Only change with a known replacement.",
+      "packages": [
+        "com.sec.android.app.launcher",
+        "com.samsung.android.incallui",
+        "com.samsung.android.dialer",
+        "com.sec.imsservice",
+        "com.samsung.advp.imssettings"
+      ],
+      "prefixes": []
+    },
+    {
+      "id": "social_meta",
+      "label": "Social — Meta / Facebook",
+      "defaultAction": "remove",
+      "reason": "Facebook / Meta preinstall stubs; often removed on debloat lists if unused.",
+      "packages": [
+        "com.facebook.services",
+        "com.facebook.katana",
+        "com.facebook.system",
+        "com.facebook.appmanager"
+      ],
+      "prefixes": ["com.facebook."]
+    },
+    {
+      "id": "store_samsung",
+      "label": "Samsung Galaxy Store",
+      "defaultAction": "remove",
+      "reason": "App store; removing blocks Galaxy Store installs/updates for Samsung apps.",
+      "packages": ["com.sec.android.app.samsungapps"],
+      "prefixes": []
+    },
+    {
+      "id": "browser_chrome_customization",
+      "label": "Browser-related (Samsung + Chrome)",
+      "defaultAction": "remove",
+      "reason": "Samsung Chrome customization; safe if you do not rely on it. Does not replace uninstalling Chrome/Samsung Internet themselves.",
+      "packages": [
+        "com.sec.android.app.chromecustomizations",
+        "com.android.chrome",
+        "com.sec.android.app.sbrowser"
+      ],
+      "prefixes": []
+    },
+    {
+      "id": "search_launcher",
+      "label": "Search / Finder (can open web)",
+      "defaultAction": "review",
+      "reason": "Galaxy Finder integrates search; some parents remove to reduce web entry from launcher.",
+      "packages": ["com.samsung.android.app.galaxyfinder"],
+      "prefixes": []
+    },
+    {
+      "id": "microsoft_stubs",
+      "label": "Microsoft (Phone Link / Office stub)",
+      "defaultAction": "remove",
+      "reason": "Link to Windows / Office headless; optional on phones.",
+      "packages": [
+        "com.microsoft.appmanager",
+        "com.microsoft.office.officehubhl"
+      ],
+      "prefixes": []
+    },
+    {
+      "id": "gaming_samsung",
+      "label": "Samsung Game features",
+      "defaultAction": "remove",
+      "reason": "Game Launcher / tools / optimization; remove if you do not use Samsung gaming features.",
+      "packages": [
+        "com.samsung.android.game.gamehome",
+        "com.samsung.android.game.gametools",
+        "com.samsung.android.game.gos"
+      ],
+      "prefixes": ["com.samsung.gamedriver."]
+    },
+    {
+      "id": "ar_vr_samsung",
+      "label": "AR / VR (Samsung)",
+      "defaultAction": "remove",
+      "reason": "AR Zone, AR Doodle, AR Emoji, Gear VR service, stickers — optional.",
+      "packages": [
+        "com.samsung.android.arzone",
+        "com.samsung.android.ardrawing",
+        "com.samsung.android.aremoji",
+        "com.samsung.android.hmt.vrsvc",
+        "com.samsung.android.stickercenter",
+        "com.samsung.android.livestickers",
+        "com.samsung.android.app.camera.sticker.facearavatar.preload"
+      ],
+      "prefixes": []
+    },
+    {
+      "id": "bixby",
+      "label": "Bixby",
+      "defaultAction": "remove",
+      "reason": "Bixby voice/UI pieces; some removals may need testing on your One UI version.",
+      "packages": [
+        "com.samsung.android.bixby.agent",
+        "com.samsung.android.bixby.service",
+        "com.samsung.android.bixby.wakeup",
+        "com.samsung.systemui.bixby2",
+        "com.samsung.android.app.settings.bixby"
+      ],
+      "prefixes": []
+    },
+    {
+      "id": "ant_plus",
+      "label": "ANT+ (fitness radios)",
+      "defaultAction": "review",
+      "reason": "Remove only if you do not use ANT+ accessories (some Garmin / bike sensors).",
+      "packages": [
+        "com.dsi.ant.service.socket",
+        "com.dsi.ant.server",
+        "com.dsi.ant.plugins.antplus",
+        "com.dsi.ant.sample.acquirechannels"
+      ],
+      "prefixes": ["com.dsi.ant."]
+    },
+    {
+      "id": "google_optional",
+      "label": "Google apps (optional)",
+      "defaultAction": "review",
+      "reason": "Often kept for Gmail, Maps, Drive. Remove only if you use alternatives.",
+      "packages": [
+        "com.google.android.gm",
+        "com.google.android.apps.maps",
+        "com.google.android.apps.docs",
+        "com.google.android.apps.photos",
+        "com.google.android.videos",
+        "com.google.android.youtube",
+        "com.google.android.apps.tachyon",
+        "com.google.android.apps.dynamite"
+      ],
+      "prefixes": []
+    },
+    {
+      "id": "play_store",
+      "label": "Google Play Store",
+      "defaultAction": "keep",
+      "reason": "Removing blocks normal Play installs/updates; use Family Link to restrict instead.",
+      "packages": ["com.android.vending"],
+      "prefixes": []
+    },
+    {
+      "id": "parental_familylink",
+      "label": "Parental / Family Link",
+      "defaultAction": "keep",
+      "reason": "Keep if you use Google Family Link on this device.",
+      "packages": [
+        "com.google.android.apps.kids.familylinkhelper",
+        "com.google.android.gms.supervision"
+      ],
+      "prefixes": []
+    }
+  ]
+}

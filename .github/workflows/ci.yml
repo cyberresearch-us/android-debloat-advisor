@@ -1,0 +1,51 @@
+# Security + consistency checks (no secrets; static site)
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+permissions:
+  contents: read
+
+jobs:
+  rules-sync:
+    name: Rules JSON in sync
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compare data/rules.json and docs/data/rules.json
+        run: |
+          if ! cmp -s data/rules.json docs/data/rules.json; then
+            echo "::error::data/rules.json and docs/data/rules.json differ. Run scripts/sync-rules.ps1 or copy manually."
+            diff -u data/rules.json docs/data/rules.json || true
+            exit 1
+          fi
+          echo "OK: rules files match"
+
+  trivy:
+    name: Trivy filesystem scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run Trivy (repo root)
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          scan-type: "fs"
+          scan-ref: "."
+          severity: "CRITICAL,HIGH"
+          exit-code: "0"
+          format: "table"
+
+  gitleaks:
+    name: Gitleaks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

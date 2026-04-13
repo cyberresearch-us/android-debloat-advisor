@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Android Package Advisor</title>
+  <style>
+    :root {
+      --bg: #0f1419;
+      --panel: #1a2332;
+      --text: #e7ecf3;
+      --muted: #8b9cb3;
+      --accent: #3d8bfd;
+      --danger: #f07178;
+      --ok: #7fd99a;
+      --warn: #ebc275;
+      --border: #2d3a4d;
+      --font: "Segoe UI", system-ui, sans-serif;
+      --mono: ui-monospace, "Cascadia Code", monospace;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+    header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      background: var(--panel);
+    }
+    header h1 { margin: 0 0 0.35rem; font-size: 1.35rem; font-weight: 650; }
+    header p { margin: 0; color: var(--muted); font-size: 0.95rem; max-width: 62rem; }
+    main { padding: 1.25rem 1.5rem 3rem; max-width: 1200px; margin: 0 auto; }
+    a { color: var(--accent); }
+    section {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1rem;
+    }
+    section h2 { margin: 0 0 0.75rem; font-size: 1.05rem; font-weight: 600; }
+    textarea {
+      width: 100%;
+      min-height: 120px;
+      padding: 0.65rem 0.75rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: 12px;
+      resize: vertical;
+    }
+    .row { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; align-items: center; margin-top: 0.75rem; }
+    button, .btn {
+      font-family: var(--font);
+      font-size: 0.9rem;
+      padding: 0.45rem 0.9rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+      cursor: pointer;
+    }
+    button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+    button:disabled { opacity: 0.45; cursor: not-allowed; }
+    .toolbar { margin-bottom: 0.75rem; display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
+    label.filter { font-size: 0.85rem; color: var(--muted); }
+    select {
+      background: var(--bg);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.35rem 0.5rem;
+    }
+    .stats { font-size: 0.85rem; color: var(--muted); }
+    .table-wrap { overflow-x: auto; border-radius: 8px; border: 1px solid var(--border); }
+    table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+    th, td { padding: 0.45rem 0.55rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    th { background: var(--bg); color: var(--muted); font-weight: 600; white-space: nowrap; }
+    tr:hover td { background: rgba(61, 139, 253, 0.06); }
+    td.pkg { font-family: var(--mono); word-break: break-all; }
+    td.path { font-family: var(--mono); font-size: 11px; color: var(--muted); max-width: 280px; word-break: break-all; }
+    .badge {
+      display: inline-block;
+      padding: 0.15rem 0.45rem;
+      border-radius: 4px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    .badge.remove { background: rgba(240, 113, 120, 0.2); color: var(--danger); }
+    .badge.keep { background: rgba(127, 217, 154, 0.2); color: var(--ok); }
+    .badge.review { background: rgba(235, 194, 117, 0.2); color: var(--warn); }
+    .badge.critical { background: rgba(139, 156, 179, 0.25); color: var(--muted); }
+    .reason { color: var(--muted); font-size: 0.8rem; max-width: 320px; }
+    #exportOut {
+      width: 100%;
+      min-height: 140px;
+      font-family: var(--mono);
+      font-size: 11px;
+    }
+    .callout {
+      font-size: 0.88rem;
+      color: var(--warn);
+      background: rgba(235, 194, 117, 0.08);
+      border: 1px solid rgba(235, 194, 117, 0.35);
+      padding: 0.65rem 0.85rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    }
+    footer { padding: 1rem 1.5rem; color: var(--muted); font-size: 0.8rem; text-align: center; border-top: 1px solid var(--border); }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Android Package Advisor</h1>
+    <p>
+      Paste <code>adb shell pm list packages -f</code> output, review suggestions, then export uninstall commands.
+      Read <a href="family-link.html">Family Link notes</a> — ADB debloat does not replace parental controls.
+    </p>
+  </header>
+  <main>
+    <div class="callout">
+      <strong>Disclaimer:</strong> Suggestions are heuristic. Wrong removals can break your device. Restore with
+      <code>adb shell cmd package install-existing &lt;package&gt;</code> when the package still exists on the system image.
+    </div>
+
+    <section>
+      <h2>1. Package list</h2>
+      <textarea id="input" placeholder="package:/system/app/Example/Example.apk=com.example.app"></textarea>
+      <div class="row">
+        <button type="button" class="primary" id="btnAnalyze">Analyze</button>
+        <button type="button" id="btnLoadDemo">Load demo snippet</button>
+        <span class="stats" id="loadStatus"></span>
+      </div>
+    </section>
+
+    <section id="resultsSection" hidden>
+      <h2>2. Review packages</h2>
+      <div class="toolbar">
+        <label class="filter">Filter</label>
+        <select id="filterCat">
+          <option value="">All categories</option>
+        </select>
+        <label class="filter">Show</label>
+        <select id="filterAction">
+          <option value="">All</option>
+          <option value="remove">Suggested remove</option>
+          <option value="keep">Suggested keep</option>
+          <option value="review">Review</option>
+          <option value="selected">Marked to remove</option>
+        </select>
+        <button type="button" id="btnSelectSuggested">Select all suggested remove</button>
+        <button type="button" id="btnClearRemove">Clear all remove checks</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Remove</th>
+              <th>Package</th>
+              <th>Path</th>
+              <th>Suggestion</th>
+              <th>Category</th>
+              <th>Note</th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="exportSection" hidden>
+      <h2>3. Export commands</h2>
+      <div class="row" style="margin-bottom: 0.75rem;">
+        <label class="filter"><input type="radio" name="ex" value="system" checked /> <code>pm uninstall -k --user 0</code> (system / typical debloat)</label>
+        <label class="filter"><input type="radio" name="ex" value="user" /> <code>pm uninstall --user 0</code> (user installs, no -k)</label>
+        <label class="filter"><input type="radio" name="ex" value="mixed" /> Mixed (guess from path: /data/app → user, else -k)</label>
+      </div>
+      <textarea id="exportOut" readonly></textarea>
+      <div class="row">
+        <button type="button" class="primary" id="btnCopy">Copy to clipboard</button>
+        <button type="button" id="btnRefreshExport">Refresh export</button>
+      </div>
+    </section>
+  </main>
+  <footer>
+    MIT · Rules live in <code>docs/data/rules.json</code> — PRs welcome · Not affiliated with Google or Samsung
+  </footer>
+
+  <script>
+    /** @type {{ version: number, criticalPackages: string[], categories: { id: string, label: string, defaultAction: string, reason: string, packages: string[], prefixes: string[] }[] } | null } */
+    let rules = null;
+    /** @type {{ package: string, path: string, critical: boolean, categoryId: string | null, categoryLabel: string | null, suggestion: string, reason: string, removeChecked: boolean, rowEl: HTMLTableRowElement | null }[]} */
+    let rows = [];
+
+    async function loadRules() {
+      const res = await fetch("data/rules.json");
+      if (!res.ok) throw new Error("Could not load rules.json");
+      rules = await res.json();
+    }
+
+    function parseInput(text) {
+      const out = [];
+      const re = /^package:([^=]+)=(.+)$/gm;
+      let m;
+      while ((m = re.exec(text)) !== null) {
+        out.push({ path: m[1].trim(), package: m[2].trim() });
+      }
+      return out;
+    }
+
+    function classify(pkg) {
+      if (!rules) return { critical: true, categoryId: null, categoryLabel: null, suggestion: "keep", reason: "Rules not loaded." };
+      if (rules.criticalPackages.includes(pkg)) {
+        return {
+          critical: true,
+          categoryId: "critical",
+          categoryLabel: "Critical (core Android / Play)",
+          suggestion: "keep",
+          reason: "Core system or Play Services component — do not remove unless you know exactly why.",
+        };
+      }
+      for (const cat of rules.categories) {
+        if (cat.packages && cat.packages.includes(pkg)) {
+          return {
+            critical: false,
+            categoryId: cat.id,
+            categoryLabel: cat.label,
+            suggestion: cat.defaultAction,
+            reason: cat.reason,
+          };
+        }
+        for (const pre of cat.prefixes || []) {
+          if (pkg === pre || pkg.startsWith(pre)) {
+            return {
+              critical: false,
+              categoryId: cat.id,
+              categoryLabel: cat.label,
+              suggestion: cat.defaultAction,
+              reason: cat.reason,
+            };
+          }
+        }
+      }
+      return {
+        critical: false,
+        categoryId: "unknown",
+        categoryLabel: "Unlisted",
+        suggestion: "review",
+        reason: "No rule matched — research before removing.",
+      };
+    }
+
+    function initialRemoveChecked(suggestion, critical) {
+      if (critical) return false;
+      return suggestion === "remove";
+    }
+
+    function badgeClass(s) {
+      if (s === "remove") return "remove";
+      if (s === "keep") return "keep";
+      return "review";
+    }
+
+    function renderTable() {
+      const tbody = document.getElementById("tbody");
+      const filterCat = document.getElementById("filterCat").value;
+      const filterAct = document.getElementById("filterAction").value;
+      tbody.innerHTML = "";
+
+      for (const r of rows) {
+        if (filterCat && r.categoryId !== filterCat) continue;
+        if (filterAct === "selected" && !r.removeChecked) continue;
+        if (filterAct && filterAct !== "selected") {
+          if (r.critical && filterAct !== "keep") continue;
+          if (!r.critical && r.suggestion !== filterAct) continue;
+        }
+
+        const tr = document.createElement("tr");
+        r.rowEl = tr;
+
+        const td0 = document.createElement("td");
+        const cb = document.createElement("input");
+        cb.type = "checkbox";
+        cb.checked = r.removeChecked;
+        cb.disabled = r.critical;
+        cb.addEventListener("change", () => {
+          r.removeChecked = cb.checked;
+          refreshExport();
+        });
+        td0.appendChild(cb);
+
+        const td1 = document.createElement("td");
+        td1.className = "pkg";
+        td1.textContent = r.package;
+
+        const td2 = document.createElement("td");
+        td2.className = "path";
+        td2.textContent = r.path;
+
+        const td3 = document.createElement("td");
+        const b = document.createElement("span");
+        b.className = "badge " + (r.critical ? "critical" : badgeClass(r.suggestion));
+        b.textContent = r.critical ? "critical" : r.suggestion;
+        td3.appendChild(b);
+
+        const td4 = document.createElement("td");
+        td4.textContent = r.categoryLabel || "—";
+
+        const td5 = document.createElement("td");
+        td5.className = "reason";
+        td5.textContent = r.reason;
+
+        tr.appendChild(td0);
+        tr.appendChild(td1);
+        tr.appendChild(td2);
+        tr.appendChild(td3);
+        tr.appendChild(td4);
+        tr.appendChild(td5);
+        tbody.appendChild(tr);
+      }
+    }
+
+    function populateCategoryFilter() {
+      const sel = document.getElementById("filterCat");
+      const cur = sel.value;
+      sel.innerHTML = '<option value="">All categories</option>';
+      const ids = [...new Set(rows.map((r) => r.categoryId).filter(Boolean))].sort();
+      for (const id of ids) {
+        const row = rows.find((x) => x.categoryId === id);
+        const opt = document.createElement("option");
+        opt.value = id;
+        opt.textContent = row ? row.categoryLabel : id;
+        sel.appendChild(opt);
+      }
+      if ([...sel.options].some((o) => o.value === cur)) sel.value = cur;
+    }
+
+    function isUserDataPath(path) {
+      return path.includes("/data/app/");
+    }
+
+    function lineForPackage(pkg, path, mode) {
+      if (mode === "system") return `adb shell pm uninstall -k --user 0 ${pkg}`;
+      if (mode === "user") return `adb shell pm uninstall --user 0 ${pkg}`;
+      if (isUserDataPath(path)) return `adb shell pm uninstall --user 0 ${pkg}`;
+      return `adb shell pm uninstall -k --user 0 ${pkg}`;
+    }
+
+    function refreshExport() {
+      const mode = document.querySelector('input[name="ex"]:checked').value;
+      const selected = rows.filter((r) => r.removeChecked && !r.critical);
+      const lines = selected.map((r) => lineForPackage(r.package, r.path, mode));
+      const header =
+        "# Android Package Advisor export\n# Review before running. Phone must be connected with USB debugging.\n\n";
+      document.getElementById("exportOut").value =
+        lines.length === 0 ? header + "# (no packages selected for removal)" : header + lines.join("\n") + "\n";
+    }
+
+    function analyze() {
+      const text = document.getElementById("input").value.trim();
+      const pkgs = parseInput(text);
+      document.getElementById("loadStatus").textContent =
+        pkgs.length === 0 ? "No packages parsed — check format." : `Parsed ${pkgs.length} packages.`;
+
+      rows = pkgs.map((p) => {
+        const c = classify(p.package);
+        return {
+          package: p.package,
+          path: p.path,
+          critical: c.critical,
+          categoryId: c.categoryId,
+          categoryLabel: c.categoryLabel,
+          suggestion: c.suggestion,
+          reason: c.reason,
+          removeChecked: initialRemoveChecked(c.suggestion, c.critical),
+          rowEl: null,
+        };
+      });
+
+      document.getElementById("resultsSection").hidden = pkgs.length === 0;
+      document.getElementById("exportSection").hidden = pkgs.length === 0;
+      populateCategoryFilter();
+      renderTable();
+      refreshExport();
+    }
+
+    document.getElementById("btnAnalyze").addEventListener("click", analyze);
+    document.getElementById("filterCat").addEventListener("change", renderTable);
+    document.getElementById("filterAction").addEventListener("change", renderTable);
+    document.querySelectorAll('input[name="ex"]').forEach((el) => el.addEventListener("change", refreshExport));
+
+    document.getElementById("btnSelectSuggested").addEventListener("click", () => {
+      for (const r of rows) {
+        if (!r.critical && r.suggestion === "remove") r.removeChecked = true;
+      }
+      renderTable();
+      refreshExport();
+    });
+
+    document.getElementById("btnClearRemove").addEventListener("click", () => {
+      for (const r of rows) {
+        if (!r.critical) r.removeChecked = false;
+      }
+      renderTable();
+      refreshExport();
+    });
+
+    document.getElementById("btnCopy").addEventListener("click", async () => {
+      const t = document.getElementById("exportOut");
+      await navigator.clipboard.writeText(t.value);
+      document.getElementById("btnCopy").textContent = "Copied!";
+      setTimeout(() => (document.getElementById("btnCopy").textContent = "Copy to clipboard"), 1500);
+    });
+
+    document.getElementById("btnRefreshExport").addEventListener("click", refreshExport);
+
+    document.getElementById("btnLoadDemo").addEventListener("click", () => {
+      document.getElementById("input").value =
+        "package:/system/priv-app/FBServices/FBServices.apk=com.facebook.services\n" +
+        "package:/system/priv-app/GalaxyApps_OPEN/GalaxyApps_OPEN.apk=com.sec.android.app.samsungapps\n" +
+        "package:/system/app/WebViewGoogle/WebViewGoogle.apk=com.google.android.webview\n" +
+        "package:/data/app/~~abc==/com.roblox.client-xyz==/base.apk=com.roblox.client\n";
+      analyze();
+    });
+
+    loadRules()
+      .then(() => {
+        document.getElementById("loadStatus").textContent = "Rules loaded.";
+      })
+      .catch((e) => {
+        document.getElementById("loadStatus").textContent = "Failed to load rules: open via local server or GitHub Pages (file:// blocks fetch).";
+        console.error(e);
+      });
+  </script>
+</body>
+</html>
