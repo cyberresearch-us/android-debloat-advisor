@@ -337,6 +337,11 @@
 
     <section id="exportSection" hidden>
       <h2>Export commands</h2>
+      <div class="row" style="margin-bottom: 0.5rem;">
+        <label class="filter"><strong style="color:var(--text);">Your OS:</strong></label>
+        <label class="filter"><input type="radio" name="os" value="win" checked /> Windows (PowerShell)</label>
+        <label class="filter"><input type="radio" name="os" value="unix" /> macOS / Linux</label>
+      </div>
       <div class="row" style="margin-bottom: 0.75rem;">
         <label class="filter"><input type="radio" name="ex" value="system" checked /> <code>pm uninstall -k --user 0</code> (system / typical debloat)</label>
         <label class="filter"><input type="radio" name="ex" value="user" /> <code>pm uninstall --user 0</code> (user installs, no -k)</label>
@@ -351,12 +356,13 @@
     <section id="runSection" hidden>
       <h2>What to do next</h2>
       <ol style="color: var(--muted); font-size: 0.88rem; line-height: 1.7; padding-left: 1.2rem;">
-        <li>Make sure the phone is still connected: <code>adb devices</code></li>
-        <li>Paste the commands above into your terminal (PowerShell, Terminal, or Command Prompt).</li>
+        <li>Make sure the phone is still connected. Run <code>.\adb.exe devices</code> (Windows) or <code>adb devices</code> (macOS/Linux).</li>
+        <li>Paste the commands above into PowerShell (Windows) or Terminal (macOS/Linux). Do <strong>not</strong> run <code>adb shell</code> first — paste them directly.</li>
         <li>Each command prints <code>Success</code> or <code>Failure</code>.</li>
         <li>Test the phone — make a call, open the camera, send a text.</li>
         <li>If something broke, restore it immediately:
-          <code style="display:block; margin: 0.3rem 0;">adb shell cmd package install-existing com.example.package</code>
+          <code style="display:block; margin: 0.3rem 0;">.\adb.exe shell cmd package install-existing com.example.package</code>
+          <span style="font-size:0.8rem;">(macOS/Linux: use <code>adb</code> instead of <code>.\adb.exe</code>)</span>
         </li>
         <li>When you're done, turn off USB debugging:
           <strong>Settings → Developer options → USB debugging → OFF</strong>.
@@ -595,10 +601,12 @@
     }
 
     function lineForPackage(pkg, path, mode) {
-      if (mode === "system") return `adb shell pm uninstall -k --user 0 ${pkg}`;
-      if (mode === "user") return `adb shell pm uninstall --user 0 ${pkg}`;
-      if (isUserDataPath(path)) return `adb shell pm uninstall --user 0 ${pkg}`;
-      return `adb shell pm uninstall -k --user 0 ${pkg}`;
+      const os = document.querySelector('input[name="os"]:checked').value;
+      const adb = os === "win" ? ".\\adb.exe" : "adb";
+      if (mode === "system") return `${adb} shell pm uninstall -k --user 0 ${pkg}`;
+      if (mode === "user") return `${adb} shell pm uninstall --user 0 ${pkg}`;
+      if (isUserDataPath(path)) return `${adb} shell pm uninstall --user 0 ${pkg}`;
+      return `${adb} shell pm uninstall -k --user 0 ${pkg}`;
     }
 
     function refreshExport() {
@@ -644,6 +652,7 @@
     document.getElementById("filterCat").addEventListener("change", renderTable);
     document.getElementById("filterAction").addEventListener("change", renderTable);
     document.querySelectorAll('input[name="ex"]').forEach((el) => el.addEventListener("change", refreshExport));
+    document.querySelectorAll('input[name="os"]').forEach((el) => el.addEventListener("change", refreshExport));
 
     document.getElementById("btnSelectSuggested").addEventListener("click", () => {
       for (const r of rows) {
