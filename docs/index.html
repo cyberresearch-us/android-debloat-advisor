@@ -100,6 +100,8 @@
     .badge.review { background: rgba(235, 194, 117, 0.2); color: var(--warn); }
     .badge.critical { background: rgba(139, 156, 179, 0.25); color: var(--muted); }
     .reason { color: var(--muted); font-size: 0.8rem; max-width: 320px; }
+    .lookup-link { font-size: 0.7rem; color: var(--accent); opacity: 0.5; text-decoration: none; }
+    .lookup-link:hover { opacity: 1; text-decoration: underline; }
     #exportOut {
       width: 100%;
       min-height: 140px;
@@ -557,7 +559,16 @@
 
         const td1 = document.createElement("td");
         td1.className = "pkg";
-        td1.textContent = r.package;
+        const pkgText = document.createTextNode(r.package + " ");
+        td1.appendChild(pkgText);
+        const searchLink = document.createElement("a");
+        searchLink.href = `https://www.google.com/search?q=android+package+${encodeURIComponent(r.package)}`;
+        searchLink.target = "_blank";
+        searchLink.rel = "noopener";
+        searchLink.textContent = "lookup";
+        searchLink.className = "lookup-link";
+        searchLink.title = `Search Google for ${r.package}`;
+        td1.appendChild(searchLink);
 
         const td2 = document.createElement("td");
         td2.className = "path";
