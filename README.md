@@ -2,6 +2,8 @@
 
 A static tool that reads your phone's installed-package list, suggests what is safe to remove vs. keep, and exports the exact shell commands — **no account, no server, no build step**.
 
+![Android Package Advisor screenshot](docs/screenshot.png)
+
 ---
 
 ## What it does

@@ -8,3 +8,5 @@ Thumbs.db
 .env
 .env.*
 !.env.example
+# exported phone package lists (may contain device-specific data)
+docs/test-packages.txt

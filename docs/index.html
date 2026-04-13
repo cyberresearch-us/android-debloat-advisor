@@ -211,10 +211,15 @@
 
     function parseInput(text) {
       const out = [];
-      const re = /^package:([^=]+)=(.+)$/gm;
-      let m;
-      while ((m = re.exec(text)) !== null) {
-        out.push({ path: m[1].trim(), package: m[2].trim() });
+      for (const raw of text.split(/\r?\n/)) {
+        const line = raw.trim();
+        if (!line.startsWith("package:")) continue;
+        // Package name is always after the LAST '=' — data paths contain '==' hashes
+        const lastEq = line.lastIndexOf("=");
+        if (lastEq < 0) continue;
+        const pkg  = line.slice(lastEq + 1).trim();
+        const path = line.slice("package:".length, lastEq).trim();
+        if (pkg) out.push({ path, package: pkg });
       }
       return out;
     }
