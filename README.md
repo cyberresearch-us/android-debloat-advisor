@@ -134,6 +134,12 @@ android-debloat-advisor/
 
 ---
 
+## Acknowledgments
+
+This project was built with AI assistance from [Claude](https://claude.ai/) (Anthropic) via [Cursor](https://cursor.com/). Code, rules, documentation, and prompts were pair-programmed in conversation.
+
+---
+
 ## License
 
 MIT — [LICENSE](LICENSE)
