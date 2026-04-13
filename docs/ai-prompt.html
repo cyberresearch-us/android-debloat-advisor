@@ -5,16 +5,28 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>AI Prompt — Android Package Advisor</title>
   <style>
-    body { font-family: system-ui, sans-serif; max-width: 44rem; margin: 2rem auto; padding: 0 1rem; line-height: 1.6; color: #1a1a1a; }
+    :root {
+      --bg: #0f1419;
+      --panel: #1a2332;
+      --text: #e7ecf3;
+      --muted: #8b9cb3;
+      --accent: #3d8bfd;
+      --border: #2d3a4d;
+      --tip-bg: rgba(127,217,154,0.08);
+      --tip-border: rgba(127,217,154,0.35);
+      --tip-text: #7fd99a;
+    }
+    * { box-sizing: border-box; }
+    body { font-family: "Segoe UI", system-ui, sans-serif; max-width: 44rem; margin: 0 auto; padding: 2rem 1.25rem; line-height: 1.6; color: var(--text); background: var(--bg); }
     h1 { font-size: 1.4rem; }
-    h2 { font-size: 1.1rem; margin-top: 2rem; border-bottom: 1px solid #e0e0e0; padding-bottom: 0.3rem; }
-    code { background: #f3f3f3; padding: 0.1em 0.35em; border-radius: 4px; font-size: 0.88em; }
-    a { color: #0b57d0; }
+    h2 { font-size: 1.1rem; margin-top: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
+    code { background: rgba(255,255,255,0.06); padding: 0.1em 0.35em; border-radius: 4px; font-size: 0.88em; color: var(--text); }
+    a { color: var(--accent); }
     .back { font-size: 0.9rem; margin-bottom: 1.5rem; }
     .prompt-box {
       position: relative;
-      background: #f8f9fa;
-      border: 1px solid #d0d7de;
+      background: var(--panel);
+      border: 1px solid var(--border);
       border-radius: 8px;
       padding: 1rem 1.25rem;
       font-family: ui-monospace, "Cascadia Code", monospace;
@@ -22,12 +34,13 @@
       white-space: pre-wrap;
       line-height: 1.55;
       margin: 1rem 0;
+      color: var(--text);
     }
     .copy-btn {
       position: absolute;
       top: 0.5rem;
       right: 0.5rem;
-      background: #0b57d0;
+      background: var(--accent);
       color: #fff;
       border: none;
       border-radius: 6px;
@@ -35,8 +48,8 @@
       font-size: 0.8rem;
       cursor: pointer;
     }
-    .copy-btn:hover { background: #0842a0; }
-    .tip  { background: #e8f5e9; border-left: 4px solid #388e3c; padding: 0.65rem 0.85rem; border-radius: 0 8px 8px 0; font-size: 0.9rem; margin: 1rem 0; }
+    .copy-btn:hover { background: #2b6fdb; }
+    .tip  { background: var(--tip-bg); border-left: 4px solid var(--tip-text); color: var(--tip-text); padding: 0.65rem 0.85rem; border-radius: 0 8px 8px 0; font-size: 0.9rem; margin: 1rem 0; }
     ul, ol { padding-left: 1.3rem; }
     li { margin-bottom: 0.4rem; }
   </style>

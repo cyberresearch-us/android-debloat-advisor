@@ -5,12 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Family Link & parental controls</title>
   <style>
-    body { font-family: system-ui, sans-serif; max-width: 42rem; margin: 2rem auto; padding: 0 1rem; line-height: 1.55; color: #1a1a1a; }
-    a { color: #0b57d0; }
-    code { background: #f0f0f0; padding: 0.1em 0.35em; border-radius: 4px; font-size: 0.9em; }
+    :root {
+      --bg: #0f1419;
+      --panel: #1a2332;
+      --text: #e7ecf3;
+      --muted: #8b9cb3;
+      --accent: #3d8bfd;
+      --border: #2d3a4d;
+    }
+    * { box-sizing: border-box; }
+    body { font-family: "Segoe UI", system-ui, sans-serif; max-width: 42rem; margin: 0 auto; padding: 2rem 1.25rem; line-height: 1.55; color: var(--text); background: var(--bg); }
+    a { color: var(--accent); }
+    code { background: rgba(255,255,255,0.06); padding: 0.1em 0.35em; border-radius: 4px; font-size: 0.9em; color: var(--text); }
     h1 { font-size: 1.35rem; }
-    h2 { font-size: 1.05rem; margin-top: 1.5rem; }
-    ul { padding-left: 1.2rem; }
+    h2 { font-size: 1.05rem; margin-top: 1.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
+    ul, ol { padding-left: 1.2rem; }
+    li { margin-bottom: 0.3rem; }
     .back { margin-bottom: 1rem; font-size: 0.9rem; }
   </style>
 </head>

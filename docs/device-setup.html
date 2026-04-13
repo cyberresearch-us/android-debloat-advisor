@@ -5,22 +5,38 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Device Setup — Android Package Advisor</title>
   <style>
-    body { font-family: system-ui, sans-serif; max-width: 44rem; margin: 2rem auto; padding: 0 1rem; line-height: 1.6; color: #1a1a1a; }
+    :root {
+      --bg: #0f1419;
+      --panel: #1a2332;
+      --text: #e7ecf3;
+      --muted: #8b9cb3;
+      --accent: #3d8bfd;
+      --border: #2d3a4d;
+      --warn-bg: rgba(235,194,117,0.08);
+      --warn-border: rgba(235,194,117,0.35);
+      --warn-text: #ebc275;
+      --tip-bg: rgba(127,217,154,0.08);
+      --tip-border: rgba(127,217,154,0.35);
+      --tip-text: #7fd99a;
+    }
+    * { box-sizing: border-box; }
+    body { font-family: "Segoe UI", system-ui, sans-serif; max-width: 44rem; margin: 0 auto; padding: 2rem 1.25rem; line-height: 1.6; color: var(--text); background: var(--bg); }
     h1 { font-size: 1.4rem; }
-    h2 { font-size: 1.1rem; margin-top: 2rem; border-bottom: 1px solid #e0e0e0; padding-bottom: 0.3rem; }
+    h2 { font-size: 1.1rem; margin-top: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
     h3 { font-size: 0.95rem; margin-top: 1.2rem; }
-    code, kbd { background: #f3f3f3; padding: 0.1em 0.35em; border-radius: 4px; font-size: 0.88em; }
-    pre { background: #f3f3f3; padding: 0.75rem 1rem; border-radius: 8px; overflow-x: auto; font-size: 0.85em; }
-    a { color: #0b57d0; }
+    code, kbd { background: rgba(255,255,255,0.06); padding: 0.1em 0.35em; border-radius: 4px; font-size: 0.88em; color: var(--text); }
+    pre { background: var(--panel); border: 1px solid var(--border); padding: 0.75rem 1rem; border-radius: 8px; overflow-x: auto; font-size: 0.85em; color: var(--text); }
+    a { color: var(--accent); }
     .step { counter-increment: steps; }
     ol { padding-left: 1.3rem; }
     li { margin-bottom: 0.4rem; }
-    .warn { background: #fff8e1; border-left: 4px solid #f9a825; padding: 0.65rem 0.85rem; border-radius: 0 8px 8px 0; font-size: 0.9rem; margin: 1rem 0; }
-    .tip  { background: #e8f5e9; border-left: 4px solid #388e3c; padding: 0.65rem 0.85rem; border-radius: 0 8px 8px 0; font-size: 0.9rem; margin: 1rem 0; }
+    .warn { background: var(--warn-bg); border-left: 4px solid var(--warn-text); color: var(--warn-text); padding: 0.65rem 0.85rem; border-radius: 0 8px 8px 0; font-size: 0.9rem; margin: 1rem 0; }
+    .tip  { background: var(--tip-bg); border-left: 4px solid var(--tip-text); color: var(--tip-text); padding: 0.65rem 0.85rem; border-radius: 0 8px 8px 0; font-size: 0.9rem; margin: 1rem 0; }
     .back { font-size: 0.9rem; margin-bottom: 1.5rem; }
     table { border-collapse: collapse; width: 100%; font-size: 0.88rem; margin: 0.75rem 0; }
-    th, td { padding: 0.4rem 0.6rem; border: 1px solid #ddd; text-align: left; }
-    th { background: #f0f0f0; }
+    th, td { padding: 0.4rem 0.6rem; border: 1px solid var(--border); text-align: left; }
+    th { background: var(--panel); color: var(--muted); }
+    td { color: var(--text); }
   </style>
 </head>
 <body>
