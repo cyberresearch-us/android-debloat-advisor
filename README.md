@@ -27,9 +27,9 @@ You need a computer, a USB cable, and 10 minutes.
 | **5. Review suggestions** | Every package gets a label: **Remove**, **Keep**, or **Review**. Adjust the checkboxes to match what you want. |
 | **6. Copy and run** | Click **Copy to clipboard**, paste the commands back into your terminal. Done. |
 
-**Never done this before?** The **[full device setup guide](https://cyberresearch-us.github.io/android-debloat-advisor/device-setup.html)** walks through every step — from tapping Build Number 7 times to running your first command.
+**Never done this before?** The tool page itself has step-by-step setup instructions — just expand the dropdowns.
 
-**Want an AI to do it for you?** If you use Cursor, Windsurf, Claude Code, or any AI coding tool with terminal access, paste our **[ready-made prompt](https://cyberresearch-us.github.io/android-debloat-advisor/ai-prompt.html)** and let the AI handle the technical steps. You just review and approve.
+**Want an AI to do it for you?** Paste our **[ready-made prompt](https://cyberresearch-us.github.io/android-debloat-advisor/ai-prompt.html)** into Cursor, Windsurf, Claude Code, or any AI tool with terminal access. It handles every step. You just review and approve.
 
 ---
 
@@ -49,7 +49,7 @@ The advisor marks critical packages (dialer, home screen, Play Services, etc.) a
 
 Removing apps is a good start, but it does **not** block the internet or prevent new installs. Pair this tool with **Google Family Link** for app approval, web filtering, and screen time.
 
-**[Family Link setup guide and checklist](https://cyberresearch-us.github.io/android-debloat-advisor/family-link.html)**
+See [Family Link — get started](https://families.google.com/familylink/) and the [setup instructions](https://support.google.com/families/answer/7107346).
 
 ---
 
@@ -117,9 +117,8 @@ See [SECURITY.md](SECURITY.md) for the threat model and local scan instructions.
 ```
 android-debloat-advisor/
 ├── docs/                        ← GitHub Pages root
-│   ├── index.html               Interactive advisor
-│   ├── device-setup.html        Full phone + ADB setup guide
-│   ├── family-link.html         Parental controls notes
+│   ├── index.html               Interactive advisor (setup guide + tool)
+│   ├── ai-prompt.html           Copy-paste prompt for AI tools
 │   └── data/rules.json          Suggestion rules (keep in sync)
 ├── data/rules.json              Edit rules here
 ├── scripts/

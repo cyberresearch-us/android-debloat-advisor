@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>AI Prompt Builder — Android Package Advisor</title>
+  <title>AI Prompt — Android Package Advisor</title>
   <style>
     :root {
       --bg: #0f1419;
@@ -12,437 +12,240 @@
       --muted: #8b9cb3;
       --accent: #3d8bfd;
       --border: #2d3a4d;
-      --warn-text: #ebc275;
-      --warn-bg: rgba(235,194,117,0.08);
-      --warn-border: rgba(235,194,117,0.35);
       --tip-text: #7fd99a;
       --tip-bg: rgba(127,217,154,0.08);
       --font: "Segoe UI", system-ui, sans-serif;
       --mono: ui-monospace, "Cascadia Code", monospace;
     }
     * { box-sizing: border-box; }
-    body { font-family: var(--font); max-width: 48rem; margin: 0 auto; padding: 2rem 1.25rem; line-height: 1.6; color: var(--text); background: var(--bg); }
+    body { font-family: var(--font); max-width: 46rem; margin: 0 auto; padding: 2rem 1.25rem; line-height: 1.6; color: var(--text); background: var(--bg); }
     h1 { font-size: 1.4rem; margin: 0 0 0.35rem; }
-    h2 { font-size: 1.1rem; margin-top: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
+    h2 { font-size: 1.05rem; margin-top: 1.75rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
     a { color: var(--accent); }
     code { background: rgba(255,255,255,0.06); padding: 0.1em 0.35em; border-radius: 4px; font-size: 0.88em; color: var(--text); }
     .back { font-size: 0.9rem; margin-bottom: 1.5rem; }
-    .subtitle { color: var(--muted); font-size: 0.95rem; margin: 0 0 1.5rem; }
-
-    .options-panel {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 1rem 1.25rem;
-      margin-bottom: 1.25rem;
-    }
-    .options-panel h2 { margin-top: 0; border: none; padding: 0; font-size: 1.05rem; }
-    .opt-row {
-      display: flex;
-      gap: 0.65rem;
-      align-items: flex-start;
-      padding: 0.6rem 0;
-      border-bottom: 1px solid var(--border);
-    }
-    .opt-row:last-child { border-bottom: none; }
-    .opt-row.master { padding-bottom: 0.75rem; margin-bottom: 0.15rem; border-bottom: 2px solid var(--border); }
-    .opt-row input[type="checkbox"] { margin-top: 0.25rem; flex-shrink: 0; accent-color: var(--accent); width: 1.1rem; height: 1.1rem; }
-    .opt-label { flex: 1; }
-    .opt-label strong { display: block; color: var(--text); font-size: 0.92rem; }
-    .opt-label span { color: var(--muted); font-size: 0.82rem; }
-    .opt-label .manual-note { color: var(--warn-text); font-size: 0.78rem; font-style: italic; }
-
-    .prompt-section { margin-bottom: 1.25rem; }
-    .prompt-section p { color: var(--muted); font-size: 0.88rem; margin: 0 0 0.5rem; }
+    .subtitle { color: var(--muted); font-size: 0.92rem; margin: 0 0 1.25rem; }
     .prompt-box {
       position: relative;
       background: var(--panel);
       border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 1rem 1.25rem;
-      padding-top: 2.5rem;
+      padding: 2.75rem 1.25rem 1rem;
       font-family: var(--mono);
       font-size: 0.8rem;
       white-space: pre-wrap;
       word-wrap: break-word;
       line-height: 1.55;
       color: var(--text);
-      max-height: 32rem;
+      max-height: 36rem;
       overflow-y: auto;
     }
-    .prompt-empty { color: var(--muted); font-style: italic; font-family: var(--font); font-size: 0.9rem; }
-    .copy-bar {
-      position: sticky;
-      top: 0;
-      display: flex;
-      justify-content: flex-end;
-      gap: 0.5rem;
-      margin: -1rem -1.25rem 0.75rem;
-      padding: 0.5rem 0.75rem;
-      background: var(--panel);
-      border-bottom: 1px solid var(--border);
-      border-radius: 8px 8px 0 0;
-    }
-    .copy-bar button {
-      font-family: var(--font);
+    .copy-btn {
+      position: absolute;
+      top: 0.65rem;
+      right: 0.65rem;
       background: var(--accent);
       color: #fff;
       border: none;
       border-radius: 6px;
-      padding: 0.35rem 0.85rem;
-      font-size: 0.82rem;
+      padding: 0.4rem 0.9rem;
+      font-size: 0.85rem;
+      font-family: var(--font);
       cursor: pointer;
     }
-    .copy-bar button:hover { background: #2b6fdb; }
-    .step-count { color: var(--muted); font-size: 0.82rem; padding-top: 0.25rem; }
-
-    .expect-panel {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 1rem 1.25rem;
-    }
-    .expect-panel h2 { margin-top: 0; border: none; padding: 0; }
-    .expect-panel ol { padding-left: 1.3rem; }
-    .expect-panel li { margin-bottom: 0.4rem; font-size: 0.88rem; color: var(--muted); }
-    .expect-panel li strong { color: var(--text); }
-    .expect-panel p { font-size: 0.88rem; color: var(--muted); }
-
+    .copy-btn:hover { background: #2b6fdb; }
     .tip { background: var(--tip-bg); border-left: 4px solid var(--tip-text); color: var(--tip-text); padding: 0.65rem 0.85rem; border-radius: 0 8px 8px 0; font-size: 0.88rem; margin: 1rem 0; }
+    ol { padding-left: 1.3rem; }
+    li { margin-bottom: 0.35rem; font-size: 0.88rem; color: var(--muted); }
+    li strong { color: var(--text); }
+    footer { padding: 1rem 0; color: var(--muted); font-size: 0.8rem; text-align: center; border-top: 1px solid var(--border); margin-top: 2rem; }
   </style>
 </head>
 <body>
   <p class="back"><a href="index.html">&larr; Back to Package Advisor</a></p>
-  <h1>Build your AI debloat prompt</h1>
+  <h1>Let an AI do it</h1>
   <p class="subtitle">
-    Pick what you need, copy the prompt, paste it into
-    <strong>Cursor</strong>, <strong>Windsurf</strong>, <strong>Claude Code</strong>,
-    or any AI tool with terminal access. You review and approve every step.
+    Copy the prompt below, paste it into <strong>Cursor</strong>, <strong>Windsurf</strong>,
+    <strong>Claude Code</strong>, or any AI tool with terminal access.
+    The AI handles every technical step. You review and approve.
   </p>
 
-  <div class="options-panel">
-    <h2>What should the prompt include?</h2>
-
-    <div class="opt-row master">
-      <input type="checkbox" id="chkAll" />
-      <label class="opt-label" for="chkAll">
-        <strong>Select all</strong>
-        <span>Include every section below</span>
-      </label>
-    </div>
-
-    <div class="opt-row">
-      <input type="checkbox" id="chkUsb" />
-      <label class="opt-label" for="chkUsb">
-        <strong>Help me enable USB debugging</strong>
-        <span>The AI will walk you through turning on Developer Mode and USB debugging.</span>
-        <span class="manual-note">You will need to tap on the phone screen when prompted.</span>
-      </label>
-    </div>
-
-    <div class="opt-row">
-      <input type="checkbox" id="chkAdb" />
-      <label class="opt-label" for="chkAdb">
-        <strong>Help me install ADB</strong>
-        <span>The AI will detect your OS and help you download or verify ADB.</span>
-        <span class="manual-note">You may need to approve a download or extract a ZIP.</span>
-      </label>
-    </div>
-
-    <div class="opt-row">
-      <input type="checkbox" id="chkDebloat" checked />
-      <label class="opt-label" for="chkDebloat">
-        <strong>Debloat the phone</strong>
-        <span>The main process: scan apps, sort them, review, remove. Includes safety gates and undo instructions.</span>
-      </label>
-    </div>
-  </div>
-
   <div class="tip">
-    <strong>Tip:</strong> Already have ADB working and USB debugging on? Just keep "Debloat the phone" checked.
-    New to this? Check all three.
+    <strong>What you need:</strong> A USB cable, ADB on your computer, and USB debugging turned on.
+    Not sure how? The prompt walks the AI through helping you set those up too.
   </div>
 
-  <div class="prompt-section">
-    <h2>Your prompt</h2>
-    <p>This updates live. Click <strong>Copy</strong> when ready.</p>
-    <div class="prompt-box" id="promptBox">
-      <div class="copy-bar">
-        <span class="step-count" id="stepCount"></span>
-        <button type="button" id="copyBtn">Copy</button>
-      </div>
-      <div id="promptText"></div>
-    </div>
-  </div>
+  <div class="prompt-box" id="promptBox"><button class="copy-btn" id="copyBtn" type="button">Copy</button>I have an Android phone and I need your help removing bloatware.
+Follow the steps below one at a time.
+At each STOP gate, you MUST pause, show me what you found, and wait
+for me to say "continue" before moving on.
 
-  <div class="expect-panel">
-    <h2>What to expect</h2>
-    <p>The AI stops at <strong>safety gates</strong>. Nothing destructive happens until you say so.</p>
-    <ol>
-      <li><strong>Connection check</strong> &mdash; AI confirms the phone is connected. You verify the model.</li>
-      <li><strong>Package scan</strong> &mdash; AI reports how many apps it found. You say continue.</li>
-      <li><strong>Sort and review</strong> &mdash; AI shows a Remove / Keep / Review table. <strong>You pick what gets removed.</strong></li>
-      <li><strong>Dry run</strong> &mdash; AI shows every command it will run, <em>without running them</em>. You say "execute".</li>
-      <li><strong>Results</strong> &mdash; AI shows success/failure for each package.</li>
-      <li><strong>Test</strong> &mdash; You test the phone. If anything broke, the AI helps restore it immediately.</li>
-    </ol>
-    <p>After that, the AI reminds you to turn off USB debugging and disconnect. The whole process takes about 10 minutes.</p>
-  </div>
+---
+
+STEP 1 — Help me enable USB debugging
+Tell me to do these things on the phone:
+  1. Open Settings.
+  2. Tap About phone.
+  3. Tap Software information.
+  4. Tap Build number 7 times. Enter PIN if asked.
+  5. Go back to Settings. Open Developer options.
+  6. Turn on USB debugging. Tap OK.
+  7. Plug the phone into the computer with a USB cable.
+  8. If the phone asks "Allow USB debugging?" — tap Allow.
+
+STOP. Ask me: "Is USB debugging on? Is the phone plugged in?"
+Wait for me to say "continue".
+
+---
+
+STEP 2 — Check if ADB is installed
+Run: adb version
+If it prints a version number, skip to Step 3.
+If it says "not recognized" or "command not found", tell me:
+  - Windows: download Platform Tools from https://developer.android.com/studio/releases/platform-tools, extract to C:\platform-tools, then run: C:\platform-tools\adb.exe version
+  - macOS: run: brew install android-platform-tools
+  - Linux: run: sudo apt install adb
+
+STOP. Show me the version output. Wait for me to say "continue".
+
+---
+
+STEP 3 — Check phone connection
+Run: adb devices
+You should see one line with a serial number and the word "device".
+If it says "unauthorized", tell me to tap Allow on the phone.
+If nothing is listed, tell me to try a different USB cable.
+
+STOP. Tell me: what device is connected? Show the serial and status.
+Wait for me to say "continue".
+
+---
+
+STEP 4 — Get the list of installed apps
+Run: adb shell pm list packages -f
+Count how many lines start with "package:".
+
+STOP. Tell me: "Found [N] packages. Ready to sort them."
+Wait for me to say "continue".
+
+---
+
+STEP 5 — Sort packages into three groups
+Go through every package. Put each one into exactly one group:
+
+REMOVE — Bloatware the user probably does not want:
+  Facebook, Instagram, TikTok, Microsoft stubs, Samsung Game tools,
+  AR/VR, Bixby, Galaxy Store, carrier apps (Verizon, AT&amp;T, T-Mobile),
+  Netflix stubs, ANT+ radio, Samsung TV Plus, HeyTap/OPLUS cloud.
+
+KEEP — Removing these will break the phone:
+  Launcher, Dialer, In-call UI, IMS, Play Services, Google Services
+  Framework, WebView, Permission Controller, Settings, SystemUI,
+  Telephony, Package Installer, Contacts Provider, Media Provider.
+
+REVIEW — Everything else. I will decide.
+
+Show me three tables: REMOVE, KEEP, REVIEW.
+For each package show: package name, short description, your group.
+
+STOP. Show me:
+  - Counts: how many REMOVE, KEEP, REVIEW.
+  - The full REMOVE list so I can check it.
+  - The full KEEP list so I can verify.
+  - The REVIEW list so I can decide.
+Do NOT continue until I say "approved" or give you changes.
+
+---
+
+STEP 6 — Show the commands (do NOT run yet)
+For each package I approved for removal, write the uninstall command:
+  - If the path contains /data/app: adb shell pm uninstall --user 0 PACKAGE
+  - All others: adb shell pm uninstall -k --user 0 PACKAGE
+
+STOP. Show me every command. Tell me: "These are [N] commands. Say execute to run them."
+Do NOT run anything. Wait for me to say "execute".
+
+---
+
+STEP 7 — Run the commands
+Run only the commands I approved. Show the result of each: Success or Failure.
+After all are done, show a summary: how many succeeded, how many failed.
+
+STOP. Show me the summary. Wait for me to say "continue".
+
+---
+
+STEP 8 — Test the phone
+Tell me to test these things:
+  - Make a phone call.
+  - Open the camera.
+  - Send a text message.
+  - Check notifications.
+  - Open any app I said to keep (Maps, email, etc.).
+
+Remind me: to restore any app, run:
+  adb shell cmd package install-existing PACKAGE_NAME
+
+STOP. Ask me: "Did everything work? Tell me if anything is broken."
+Wait for my answer.
+
+---
+
+STEP 9 — Fix anything broken
+If I report a problem:
+  1. Tell me which removed package probably caused it.
+  2. Show me the restore command.
+  3. Wait for me to approve.
+  4. Run it.
+  5. Ask me to test again.
+  6. Repeat until fixed.
+If I say everything works, go to Step 10.
+
+---
+
+STEP 10 — Clean up
+Tell me to:
+  1. Open Settings &gt; Developer options.
+  2. Turn OFF USB debugging.
+  3. Disconnect the USB cable.
+  4. Restart the phone.
+
+We are done.
+
+---
+
+RULES (follow at all times):
+- NEVER skip a STOP gate. Always wait for my response.
+- NEVER run an uninstall command without my approval.
+- NEVER remove com.google.android.webview. It is NOT a browser.
+- NEVER remove the launcher, dialer, or messaging app.
+- If unsure about a package, put it in REVIEW, not REMOVE.
+- If I say something is broken, help me restore it immediately.</div>
+
+  <h2>What to expect</h2>
+  <p style="color: var(--muted); font-size: 0.88rem;">The AI stops at safety gates. Nothing runs without your say-so.</p>
+  <ol>
+    <li><strong>Steps 1–2</strong> — Setup help: USB debugging and ADB install.</li>
+    <li><strong>Step 3</strong> — AI confirms the phone is connected.</li>
+    <li><strong>Step 5</strong> — AI shows Remove / Keep / Review lists. <strong>You pick what gets removed.</strong></li>
+    <li><strong>Step 6</strong> — AI shows every command before running. You say "execute".</li>
+    <li><strong>Step 8</strong> — You test the phone. AI helps restore anything broken.</li>
+  </ol>
+  <p style="color: var(--muted); font-size: 0.88rem;">About 10 minutes start to finish.</p>
+
+  <footer>
+    <a href="index.html">Back to Package Advisor</a> · <a href="https://github.com/cyberresearch-us/android-debloat-advisor">Source on GitHub</a>
+  </footer>
 
   <script>
-    const PROMPT_USB = [
-      "STEP {N} \u2014 Enable Developer Mode on the phone",
-      "Tell me to do the following on the phone:",
-      "  1. Open Settings.",
-      "  2. Tap About phone.",
-      "  3. Tap Software information.",
-      '  4. Tap Build number 7 times fast. Enter the PIN if asked.',
-      '  5. Go back to Settings. A new item called Developer options should appear.',
-      "",
-      "STOP. Ask me: \"Do you see Developer options in Settings now?\"",
-      "Wait for me to say \"continue\".",
-      "",
-      "---",
-      "",
-      "STEP {N} \u2014 Turn on USB debugging",
-      "Tell me to do the following on the phone:",
-      "  1. Open Settings > Developer options.",
-      "  2. Scroll to the Debugging section.",
-      "  3. Turn on USB debugging. Tap OK on the warning.",
-      "  4. Plug the phone into the computer with a USB cable.",
-      '  5. If a popup says "Allow USB debugging?" \u2014 tap Allow.',
-      "",
-      "STOP. Ask me: \"Is the phone plugged in? Did you tap Allow?\"",
-      "Wait for me to say \"continue\".",
-    ];
-
-    const PROMPT_ADB = [
-      "STEP {N} \u2014 Check if ADB is installed",
-      "Run: adb version",
-      "If it prints a version number, ADB is installed. Skip to the next step.",
-      "If it says \"not recognized\" or \"command not found\", go to the next step.",
-      "",
-      "STOP. Show me the output. Wait for me to say \"continue\".",
-      "",
-      "---",
-      "",
-      "STEP {N} \u2014 Install ADB (skip if already installed)",
-      "Find out what operating system this computer uses.",
-      "",
-      "If Windows:",
-      "  1. Open https://developer.android.com/studio/releases/platform-tools",
-      "  2. Tell me to download the Windows ZIP and extract it to C:\\platform-tools.",
-      "  3. After I confirm, run: C:\\platform-tools\\adb.exe version",
-      "",
-      "If macOS:",
-      "  1. Run: brew install android-platform-tools",
-      "  2. If brew is not installed, tell me to download the ZIP from the Google link above.",
-      "  3. Run: adb version",
-      "",
-      "If Linux:",
-      "  1. Run: sudo apt install adb   (or: sudo dnf install android-tools)",
-      "  2. Run: adb version",
-      "",
-      "STOP. Show me the version output. Wait for me to say \"continue\".",
-    ];
-
-    const PROMPT_DEBLOAT = [
-      "STEP {N} \u2014 Check phone connection",
-      "Run: adb devices",
-      "Look at the output. You should see one line with a serial number and the word \"device\".",
-      "If it says \"unauthorized\", tell me to check the phone screen and tap Allow.",
-      "If nothing is listed, tell me to try a different USB cable.",
-      "",
-      "STOP. Tell me: what device is connected? Show the serial and status.",
-      "Wait for me to say \"continue\".",
-      "",
-      "---",
-      "",
-      "STEP {N} \u2014 Get the list of installed apps",
-      "Run: adb shell pm list packages -f",
-      "Count how many lines start with \"package:\". That is the total number of apps.",
-      "",
-      "STOP. Tell me: \"Found [N] packages. Ready to sort them.\"",
-      "Wait for me to say \"continue\".",
-      "",
-      "---",
-      "",
-      "STEP {N} \u2014 Sort packages into three groups",
-      "Go through every package. Put each one into exactly one group:",
-      "",
-      "REMOVE \u2014 Bloatware the user probably does not want:",
-      "  Facebook, Instagram, TikTok, Microsoft stubs, Samsung Game tools,",
-      "  AR/VR, Bixby, Galaxy Store, carrier apps (Verizon, AT&T, T-Mobile),",
-      "  Netflix stubs, ANT+ radio, Samsung TV Plus, HeyTap/OPLUS cloud.",
-      "",
-      "KEEP \u2014 Critical system packages. Removing these will break the phone:",
-      "  Launcher, Dialer, In-call UI, IMS service, Play Services,",
-      "  Google Services Framework, WebView, Permission Controller,",
-      "  Settings, SystemUI, Telephony, Package Installer, Contacts Provider,",
-      "  Media Provider.",
-      "",
-      "REVIEW \u2014 Everything else. I will decide on these.",
-      "",
-      "Show me three tables: REMOVE, KEEP, REVIEW.",
-      "For each package show: package name, short description, your group.",
-      "",
-      "STOP. Show me:",
-      "  - Total counts: how many REMOVE, KEEP, REVIEW.",
-      "  - The full REMOVE list so I can check it.",
-      "  - The full KEEP list so I can verify nothing important is removed.",
-      "  - The REVIEW list so I can tell you what to add to REMOVE or KEEP.",
-      "Do NOT continue until I say \"approved\" or give you changes.",
-      "",
-      "---",
-      "",
-      "STEP {N} \u2014 Show the commands (do NOT run yet)",
-      "For each package I approved for removal, write the uninstall command:",
-      "  - If the app path contains /data/app: adb shell pm uninstall --user 0 PACKAGE",
-      "  - All others: adb shell pm uninstall -k --user 0 PACKAGE",
-      "",
-      "STOP. Show me every command. Tell me: \"These are [N] commands. Say execute to run them.\"",
-      "Do NOT run anything. Wait for me to say \"execute\".",
-      "",
-      "---",
-      "",
-      "STEP {N} \u2014 Run the commands",
-      "Run only the commands I approved. Show the result of each one: Success or Failure.",
-      "After all commands are done, show a summary: how many succeeded, how many failed.",
-      "",
-      "STOP. Show me the summary. Wait for me to say \"continue\".",
-      "",
-      "---",
-      "",
-      "STEP {N} \u2014 Test the phone",
-      "Tell me to test these things on the phone:",
-      "  - Make a phone call.",
-      "  - Open the camera.",
-      "  - Send a text message.",
-      "  - Check that notifications still work.",
-      "  - Open any app I said to keep (Maps, email, etc.).",
-      "",
-      "Remind me: to undo any removal, run:",
-      "  adb shell cmd package install-existing PACKAGE_NAME",
-      "",
-      "STOP. Ask me: \"Did everything work? Tell me if anything is broken.\"",
-      "Wait for my answer.",
-      "",
-      "---",
-      "",
-      "STEP {N} \u2014 Fix anything broken",
-      "If I report a problem:",
-      "  1. Tell me which removed package probably caused it.",
-      "  2. Show me the restore command: adb shell cmd package install-existing PACKAGE",
-      "  3. Wait for me to approve it.",
-      "  4. Run it.",
-      "  5. Ask me to test again.",
-      "  6. Repeat until the problem is fixed.",
-      "If I say everything works, go to the next step.",
-      "",
-      "---",
-      "",
-      "STEP {N} \u2014 Clean up",
-      "Tell me to do these things on the phone:",
-      "  1. Open Settings > Developer options.",
-      "  2. Turn OFF USB debugging.",
-      "  3. Disconnect the USB cable.",
-      "  4. Restart the phone once.",
-      "",
-      "We are done.",
-    ];
-
-    const PROMPT_RULES = [
-      "",
-      "---",
-      "",
-      "RULES (follow at all times):",
-      "- NEVER skip a STOP gate. Always wait for my response.",
-      "- NEVER run an uninstall command without my approval.",
-      "- NEVER remove com.google.android.webview. It is NOT a browser. Many apps need it.",
-      "- NEVER remove the launcher, dialer, or messaging app.",
-      "- If you are unsure about a package, put it in REVIEW, not REMOVE.",
-      "- If I say something is broken, help me restore it immediately.",
-    ];
-
-    const PROMPT_HEADER = [
-      "I have an Android phone and I need your help removing bloatware from it.",
-      "Follow the steps below one at a time.",
-      "This process has STOP gates. At each gate you MUST stop, show me what",
-      "you found, and wait for me to say \"continue\" before going on.",
-      "",
-      "---",
-      "",
-    ];
-
-    const chkAll = document.getElementById("chkAll");
-    const chkUsb = document.getElementById("chkUsb");
-    const chkAdb = document.getElementById("chkAdb");
-    const chkDebloat = document.getElementById("chkDebloat");
-    const promptText = document.getElementById("promptText");
-    const stepCountEl = document.getElementById("stepCount");
-    const checks = [chkUsb, chkAdb, chkDebloat];
-
-    function numberSteps(lines) {
-      let n = 0;
-      return lines.map(line => {
-        if (line.startsWith("STEP {N}")) {
-          n++;
-          return line.replace("{N}", String(n));
-        }
-        return line;
-      });
-    }
-
-    function buildPrompt() {
-      const sections = [];
-      if (chkUsb.checked) sections.push(...PROMPT_USB);
-      if (chkAdb.checked) {
-        if (sections.length > 0) sections.push("", "---", "");
-        sections.push(...PROMPT_ADB);
-      }
-      if (chkDebloat.checked) {
-        if (sections.length > 0) sections.push("", "---", "");
-        sections.push(...PROMPT_DEBLOAT);
-      }
-
-      if (sections.length === 0) {
-        promptText.innerHTML = '<span class="prompt-empty">Check at least one option above to build a prompt.</span>';
-        stepCountEl.textContent = "";
-        return;
-      }
-
-      const full = [...PROMPT_HEADER, ...sections, ...PROMPT_RULES];
-      const numbered = numberSteps(full);
-      const stepTotal = numbered.filter(l => /^STEP \d+/.test(l)).length;
-      stepCountEl.textContent = stepTotal + " step" + (stepTotal === 1 ? "" : "s");
-      promptText.textContent = numbered.join("\n");
-    }
-
-    function syncSelectAll() {
-      chkAll.checked = checks.every(c => c.checked);
-      chkAll.indeterminate = !chkAll.checked && checks.some(c => c.checked);
-    }
-
-    chkAll.addEventListener("change", () => {
-      checks.forEach(c => { c.checked = chkAll.checked; });
-      buildPrompt();
-    });
-    checks.forEach(c => c.addEventListener("change", () => {
-      syncSelectAll();
-      buildPrompt();
-    }));
-
     document.getElementById("copyBtn").addEventListener("click", async () => {
-      const text = promptText.textContent || "";
-      if (!text || promptText.querySelector(".prompt-empty")) return;
+      const box = document.getElementById("promptBox");
+      const text = box.textContent.replace(/^Copy/, "").trim();
       await navigator.clipboard.writeText(text);
       const btn = document.getElementById("copyBtn");
       btn.textContent = "Copied!";
       setTimeout(() => { btn.textContent = "Copy"; }, 1500);
     });
-
-    syncSelectAll();
-    buildPrompt();
   </script>
 </body>
 </html>
