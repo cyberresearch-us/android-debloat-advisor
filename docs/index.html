@@ -264,7 +264,11 @@
         <div class="step-num">3</div>
         <div class="step-body">
           <strong>Connect the phone and get the package list</strong>
-          <p>Plug in the USB cable. Accept the "Allow USB debugging?" prompt on the phone if it appears.</p>
+          <p>Plug in the USB cable. A prompt will appear on the phone — tap <strong>Allow</strong>. Check <strong>"Always allow from this computer"</strong> so it doesn't ask again.</p>
+          <div style="margin: 0.5rem 0 0.75rem;">
+            <img src="allow_usb_debug.jpg" alt="Allow USB debugging dialog on Android showing RSA key fingerprint and Always allow checkbox" style="max-width:220px;border-radius:8px;border:1px solid var(--border);display:block;" />
+            <p style="font-size:0.78rem;color:var(--muted);margin:0.3rem 0 0;">If you see <code>unauthorized</code> when running <code>adb devices</code>, unplug and replug the cable — the prompt should reappear.</p>
+          </div>
           <details class="howto">
             <summary>Show me the commands</summary>
             <div class="detail-body">
