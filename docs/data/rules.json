@@ -371,6 +371,626 @@
         "com.google.android.gms.supervision"
       ],
       "prefixes": []
+    },
+
+    {
+      "id": "android_os_framework",
+      "label": "Android OS Framework",
+      "defaultAction": "keep",
+      "reason": "Core AOSP internals: system providers, navigation overlays, display cutouts, backup transports, and essential services. Removing these can break system stability, navigation, or backup functionality.",
+      "packages": [
+        "android.auto_generated_rro_vendor__",
+        "com.android.backupconfirm",
+        "com.android.bluetooth",
+        "com.android.bluetoothmidiservice",
+        "com.android.bookmarkprovider",
+        "com.android.calllogbackup",
+        "com.android.cameraextensions",
+        "com.android.carrierconfig",
+        "com.android.carrierdefaultapp",
+        "com.android.cellbroadcastreceiver",
+        "com.android.cellbroadcastservice",
+        "com.android.certinstaller",
+        "com.android.companiondevicemanager",
+        "com.android.connectivity.resources",
+        "com.android.cts.ctsshim",
+        "com.android.cts.priv.ctsshim",
+        "com.android.dynsystem",
+        "com.android.externalstorage",
+        "com.android.hotspot2.osulogin",
+        "com.android.hotwordenrollment.okgoogle",
+        "com.android.hotwordenrollment.xgoogle",
+        "com.android.imsserviceentitlement",
+        "com.android.inputdevices",
+        "com.android.keychain",
+        "com.android.localtransport",
+        "com.android.location.fused",
+        "com.android.managedprovisioning",
+        "com.android.mms.service",
+        "com.android.mtp",
+        "com.android.networkstack.tethering.inprocess",
+        "com.android.nfc",
+        "com.android.ons",
+        "com.android.pacprocessor",
+        "com.android.providers.blockednumber",
+        "com.android.providers.calendar",
+        "com.android.providers.downloads",
+        "com.android.providers.downloads.ui",
+        "com.android.providers.media.module",
+        "com.android.providers.partnerbookmarks",
+        "com.android.providers.userdictionary",
+        "com.android.proxyhandler",
+        "com.android.se",
+        "com.android.settings.intelligence",
+        "com.android.sharedstoragebackup",
+        "com.android.shell",
+        "com.android.simappdialog",
+        "com.android.statementservice",
+        "com.android.stk",
+        "com.android.storagemanager",
+        "com.android.traceur",
+        "com.android.vpndialogs",
+        "com.android.wallpaperbackup",
+        "com.android.wallpapercropper",
+        "com.android.wifi.resources"
+      ],
+      "prefixes": [
+        "com.android.internal.display.cutout.emulation.",
+        "com.android.internal.systemui.navbar.",
+        "com.android.internal.systemui.onehanded."
+      ]
+    },
+    {
+      "id": "android_os_optional_cosmetic",
+      "label": "Android OS Optional (screensavers, live wallpaper, easter egg, printing)",
+      "defaultAction": "review",
+      "reason": "Non-critical AOSP extras: screensavers (Daydream), live wallpaper picker, easter egg, and print spooler. Safe to remove if unused, but will not free much space.",
+      "packages": [
+        "com.android.apps.tag",
+        "com.android.bips",
+        "com.android.dreams.basic",
+        "com.android.dreams.phototable",
+        "com.android.egg",
+        "com.android.printspooler",
+        "com.android.wallpaper.livepicker",
+        "com.android.theme.font.notoserifsource"
+      ],
+      "prefixes": []
+    },
+    {
+      "id": "google_system_services",
+      "label": "Google System Services",
+      "defaultAction": "keep",
+      "reason": "Google infrastructure overlays, config providers, sync adapters, and module metadata. These support GMS, cell broadcast, permissions, and system updates. Removing can break Google services or OTA updates.",
+      "packages": [
+        "com.google.android.captiveportallogin",
+        "com.google.android.configupdater",
+        "com.google.android.ext.services",
+        "com.google.android.ext.shared",
+        "com.google.android.modulemetadata",
+        "com.google.android.networkstack.permissionconfig",
+        "com.google.android.onetimeinitializer",
+        "com.google.android.overlay.gmsconfig.common",
+        "com.google.android.overlay.gmsconfig.geotz",
+        "com.google.android.overlay.gmsconfig.gsa",
+        "com.google.android.overlay.gmsconfig.photos",
+        "com.google.android.overlay.modules.cellbroadcastreceiver",
+        "com.google.android.overlay.modules.cellbroadcastservice",
+        "com.google.android.overlay.modules.documentsui",
+        "com.google.android.overlay.modules.modulemetadata.forframework",
+        "com.google.android.overlay.modules.permissioncontroller",
+        "com.google.android.overlay.modules.permissioncontroller.forframework",
+        "com.google.android.partnersetup",
+        "com.google.android.syncadapters.calendar",
+        "com.google.android.syncadapters.contacts",
+        "com.google.mainline.telemetry"
+      ],
+      "prefixes": []
+    },
+    {
+      "id": "samsung_system_framework",
+      "label": "Samsung System Framework",
+      "defaultAction": "keep",
+      "reason": "Core Samsung services including providers, authentication framework, locale and timezone management, connectivity overlays, and network stack. Removing can break Samsung system functionality, contacts sync, or Wi-Fi.",
+      "packages": [
+        "com.samsung.aasaservice",
+        "com.samsung.android.authfw",
+        "com.samsung.android.cidmanager",
+        "com.samsung.android.cmfa.framework",
+        "com.samsung.cmfa.AuthTouch",
+        "com.samsung.android.ConnectivityOverlay",
+        "com.samsung.android.ConnectivityUxOverlay",
+        "com.samsung.android.container",
+        "com.samsung.android.localeoverlaymanager",
+        "com.samsung.android.location",
+        "com.samsung.android.networkstack",
+        "com.samsung.android.networkstack.tethering.inprocess.overlay",
+        "com.samsung.android.networkstack.tethering.overlay",
+        "com.samsung.android.peripheral.framework",
+        "com.samsung.android.providers.contacts",
+        "com.samsung.android.providers.factory",
+        "com.samsung.android.providers.media",
+        "com.samsung.android.provider.filterprovider",
+        "com.samsung.android.sdm.config",
+        "com.samsung.android.timezone.updater",
+        "com.samsung.android.timezone.data_R",
+        "com.samsung.android.wifi.p2paware.resources",
+        "com.samsung.android.wifi.resources",
+        "com.samsung.android.wifi.softap.resources",
+        "com.samsung.android.wcmurlsnetworkstack",
+        "com.samsung.android.net.wifi.wifiguider",
+        "com.samsung.android.networkdiagnostic",
+        "com.samsung.android.brightnessbackupservice",
+        "com.samsung.android.shortcutbackupservice",
+        "com.samsung.android.sume.nn.service",
+        "com.samsung.android.svcagent",
+        "com.samsung.android.da.daagent",
+        "com.samsung.android.dsms",
+        "com.samsung.android.easysetup",
+        "com.samsung.android.fast",
+        "com.samsung.android.gru",
+        "com.samsung.android.privacydashboard",
+        "com.samsung.android.ipsgeofence",
+        "com.samsung.android.samsungpositioning",
+        "com.samsung.android.appseparation",
+        "com.samsung.android.beaconmanager",
+        "com.samsung.android.bbc.bbcagent",
+        "com.samsung.android.dqagent",
+        "com.samsung.android.mcfds",
+        "com.samsung.android.mcfserver",
+        "com.samsung.android.mtp",
+        "com.samsung.android.scs",
+        "com.samsung.android.smartsuggestions",
+        "com.samsung.android.tadownloader",
+        "com.samsung.android.tapack.authfw",
+        "com.samsung.InputEventApp",
+        "com.samsung.mlp",
+        "com.samsung.phone.overlay.common",
+        "com.samsung.clipboardsaveservice",
+        "com.samsung.cmh",
+        "com.samsung.sec.android.application.csc",
+        "com.samsung.ssu",
+        "com.samsung.unifiedtp",
+        "com.samsung.ucs.agent.ese",
+        "com.sec.android.app.parser",
+        "com.sec.android.provider.badge",
+        "com.sec.android.sdhms",
+        "com.sec.android.service.health",
+        "com.sec.android.smartfpsadjuster",
+        "com.sec.android.soagent",
+        "com.sec.app.RilErrorNotifier",
+        "com.sec.automation",
+        "com.sec.bcservice",
+        "com.sec.location.nsflp2",
+        "com.sec.spp.push",
+        "com.sec.sve",
+        "com.wsomacp",
+        "com.wssyncmldm",
+        "com.skms.android.agent",
+        "com.samsung.android.hdmapp",
+        "com.samsung.android.mateagent",
+        "com.samsung.android.bluelightfilter",
+        "com.samsung.storyservice",
+        "com.samsung.android.sm.policy"
+      ],
+      "prefixes": [
+        "com.samsung.internal.systemui.navbar."
+      ]
+    },
+    {
+      "id": "samsung_telephony_carrier",
+      "label": "Samsung Telephony / Carrier",
+      "defaultAction": "keep",
+      "reason": "Samsung and carrier telephony components: IMS, RIL, ePDG, visual voicemail, Wi-Fi calling, and carrier provisioning. Removing can break calls, texts, or mobile data.",
+      "packages": [
+        "com.samsung.android.app.telephonyui",
+        "com.samsung.android.callbgprovider",
+        "com.samsung.android.smartcallprovider",
+        "com.samsung.ims.smk",
+        "com.samsung.ipservice",
+        "com.samsung.vvm.se",
+        "com.sec.android.RilServiceModeApp",
+        "com.sec.epdg",
+        "com.sec.epdgtestapp",
+        "com.sec.imslogger",
+        "com.sec.modem.settings",
+        "com.sec.phone",
+        "com.sec.providers.assisteddialing",
+        "com.sec.unifiedwfc",
+        "com.sec.vsim.ericssonnsds.webapp"
+      ],
+      "prefixes": []
+    },
+    {
+      "id": "samsung_security_biometrics",
+      "label": "Samsung Security / Biometrics",
+      "defaultAction": "keep",
+      "reason": "Knox core security, biometric authentication (face, fingerprint), Samsung Pass, Secure Folder, Find My Mobile, and KG client. Removing can break device security, lock screen, or remote-find features.",
+      "packages": [
+        "com.samsung.android.bio.face.service",
+        "com.samsung.android.biometrics.app.setting",
+        "com.samsung.android.fmm",
+        "com.samsung.android.kgclient",
+        "com.samsung.android.samsungpass",
+        "com.samsung.android.samsungpassautofill",
+        "com.samsung.android.smartface",
+        "com.samsung.faceservice",
+        "com.samsung.knox.securefolder",
+        "com.samsung.android.sm.devicesecurity"
+      ],
+      "prefixes": []
+    },
+    {
+      "id": "hardware_vendor_drivers",
+      "label": "Hardware / Vendor Drivers",
+      "defaultAction": "keep",
+      "reason": "Qualcomm GPU drivers, secure UI, time service, and Samsung GPU/Vulkan layers. These are required for hardware acceleration and secure display. Removing can cause graphical glitches or boot issues.",
+      "packages": [
+        "com.qualcomm.atfwd",
+        "com.qualcomm.qti.gpudrivers.msmnile.api30",
+        "com.qualcomm.qti.services.secureui",
+        "com.qualcomm.qti.smq",
+        "com.qualcomm.timeservice",
+        "com.samsung.gpuwatchapp",
+        "com.samsung.vklayer.sm8150",
+        "vendor.qti.hardware.cacert.server"
+      ],
+      "prefixes": []
+    },
+    {
+      "id": "factory_diagnostic_test",
+      "label": "Factory / Diagnostic / Test",
+      "defaultAction": "keep",
+      "reason": "Factory test apps, hidden menus, diagnostic agents, and service mode tools. These are used for hardware diagnostics and carrier testing. Harmless to keep; removing may prevent warranty service diagnostics.",
+      "packages": [
+        "com.sec.android.app.bluetoothtest",
+        "com.sec.android.app.factorykeystring",
+        "com.sec.android.app.hwmoduletest",
+        "com.sec.android.app.servicemodeapp",
+        "com.sec.android.app.wlantest",
+        "com.sec.android.diagmonagent",
+        "com.sec.factory",
+        "com.sec.factory.camera",
+        "com.sec.factory.cameralyzer",
+        "com.sec.hiddenmenu",
+        "com.sec.mhs.smarttethering",
+        "com.sec.usbsettings",
+        "com.sem.factoryapp",
+        "com.test.LTEfunctionality",
+        "com.samsung.android.mdagent",
+        "com.samsung.SMT"
+      ],
+      "prefixes": []
+    },
+    {
+      "id": "samsung_emergency_safety",
+      "label": "Samsung Emergency / Safety",
+      "defaultAction": "keep",
+      "reason": "Emergency mode, emergency launcher, SOS messaging, and safety information. These features can be life-saving in emergencies. Removing may prevent access to emergency services.",
+      "packages": [
+        "com.sec.android.emergencylauncher",
+        "com.sec.android.emergencymode.service",
+        "com.sec.android.provider.emergencymode",
+        "com.samsung.safetyinformation",
+        "com.sec.android.app.safetyassurance"
+      ],
+      "prefixes": []
+    },
+    {
+      "id": "setup_wizard_fonts",
+      "label": "Setup Wizards / Fonts / Auto-Install Config",
+      "defaultAction": "keep",
+      "reason": "Setup wizards handle initial device configuration and Google account linking. Fonts provide system-wide typeface support. Removing setup wizards can prevent factory reset recovery; removing fonts may cause display issues.",
+      "packages": [
+        "com.google.android.setupwizard",
+        "com.sec.android.app.SecSetupWizard",
+        "com.sec.android.app.setupwizard",
+        "com.sec.android.app.setupwizardlegalprovider",
+        "com.monotype.android.font.foundation",
+        "com.monotype.android.font.samsungone",
+        "android.autoinstalls.config.samsung"
+      ],
+      "prefixes": []
+    },
+    {
+      "id": "samsung_accessibility_features",
+      "label": "Samsung Accessibility Features",
+      "defaultAction": "keep",
+      "reason": "Accessibility services including TalkBack (screen reader), hearing adjustment, one-hand mode, magnifier, and easy mode contacts. These are essential for users with disabilities. Safe to keep even if unused.",
+      "packages": [
+        "com.samsung.accessibility",
+        "com.samsung.android.accessibility.talkback",
+        "com.sec.hearingadjust",
+        "com.sec.android.easyonehand",
+        "com.sec.android.app.magnifier",
+        "com.sec.android.widgetapp.easymodecontactswidget"
+      ],
+      "prefixes": []
+    },
+    {
+      "id": "samsung_camera_media",
+      "label": "Samsung Camera / Media",
+      "defaultAction": "review",
+      "reason": "Samsung camera SDK, gallery, video player, photo editor, video trimmer, and related media services. Safe to remove if you use alternative camera/gallery apps, but removing the main camera app will prevent taking photos.",
+      "packages": [
+        "com.samsung.android.camerasdkservice",
+        "com.samsung.android.cameraxservice",
+        "com.samsung.android.singletake.service",
+        "com.samsung.android.visionintelligence",
+        "com.samsung.android.app.dofviewer",
+        "com.samsung.android.vtcamerasettings",
+        "com.samsung.android.service.livedrawing",
+        "com.samsung.android.video",
+        "com.samsung.app.newtrim",
+        "com.sec.android.app.camera",
+        "com.sec.android.gallery3d",
+        "com.sec.android.mimage.photoretouching",
+        "com.sec.android.app.ve.vebgm",
+        "com.sec.android.app.vepreload"
+      ],
+      "prefixes": []
+    },
+    {
+      "id": "samsung_dex_desktop",
+      "label": "Samsung DeX / Desktop Mode",
+      "defaultAction": "review",
+      "reason": "Samsung DeX desktop experience: DeX on PC, desktop launcher, desktop SystemUI, and MDX framework. Safe to remove if you never connect your phone to a monitor or PC for desktop mode.",
+      "packages": [
+        "com.sec.android.app.desktoplauncher",
+        "com.sec.android.app.dexonpc",
+        "com.samsung.desktopsystemui",
+        "com.sec.android.desktopmode.uiservice",
+        "com.samsung.android.mdx",
+        "com.samsung.android.mdx.kit",
+        "com.samsung.android.mdx.quickboard"
+      ],
+      "prefixes": []
+    },
+    {
+      "id": "samsung_smart_switch",
+      "label": "Samsung Smart Switch",
+      "defaultAction": "review",
+      "reason": "Smart Switch and EasyMover help transfer data between phones. Safe to remove after initial setup, but useful to keep if you plan to migrate to a new device later.",
+      "packages": [
+        "com.samsung.android.smartswitchassistant",
+        "com.sec.android.easyMover",
+        "com.sec.android.easyMover.Agent"
+      ],
+      "prefixes": []
+    },
+    {
+      "id": "samsung_pay_billing",
+      "label": "Samsung Pay / Billing",
+      "defaultAction": "review",
+      "reason": "Samsung Pay mobile payment and Samsung billing for in-app purchases. Safe to remove if you use Google Pay or don't make Samsung app purchases.",
+      "packages": [
+        "com.samsung.android.spay",
+        "com.samsung.android.spayfw",
+        "com.sec.android.app.billing"
+      ],
+      "prefixes": []
+    },
+    {
+      "id": "samsung_edge_ui",
+      "label": "Samsung Edge UI / Panels",
+      "defaultAction": "review",
+      "reason": "Edge panels (apps, tasks, clipboard), Always-On Display service, dynamic lock screen, smart widgets, smart capture (screenshot tools), and people stripe. Safe to remove if you don't use Edge panel or AOD features.",
+      "packages": [
+        "com.samsung.android.app.appsedge",
+        "com.samsung.android.app.clipboardedge",
+        "com.samsung.android.app.taskedge",
+        "com.samsung.android.app.cocktailbarservice",
+        "com.samsung.android.app.aodservice",
+        "com.samsung.android.dynamiclock",
+        "com.samsung.android.app.smartwidget",
+        "com.samsung.android.app.smartcapture",
+        "com.samsung.android.service.peoplestripe"
+      ],
+      "prefixes": []
+    },
+    {
+      "id": "samsung_sharing_connectivity",
+      "label": "Samsung Sharing / Connectivity",
+      "defaultAction": "review",
+      "reason": "Smart View mirroring, AllShare file/media sharing, Link Sharing, ShareLive, and Private Share. Safe to remove if you don't cast your screen or share files between Samsung devices.",
+      "packages": [
+        "com.samsung.android.smartmirroring",
+        "com.samsung.android.aware.service",
+        "com.samsung.android.allshare.service.fileshare",
+        "com.samsung.android.allshare.service.mediashare",
+        "com.samsung.android.app.sharelive",
+        "com.samsung.android.app.simplesharing",
+        "com.samsung.android.privateshare"
+      ],
+      "prefixes": []
+    },
+    {
+      "id": "samsung_productivity_apps",
+      "label": "Samsung Productivity Apps",
+      "defaultAction": "review",
+      "reason": "Samsung's built-in productivity apps: Contacts, Calendar, Email, My Files, Clock, Reminder, Keyboard (Honeyboard), voice input, handwriting, dictionary, and sound tools. Safe to remove if you use Google or third-party alternatives, but ensure you have a replacement keyboard before removing Honeyboard.",
+      "packages": [
+        "com.samsung.android.app.contacts",
+        "com.samsung.android.calendar",
+        "com.samsung.android.email.provider",
+        "com.sec.android.app.myfiles",
+        "com.sec.android.app.clockpackage",
+        "com.samsung.android.app.reminder",
+        "com.samsung.android.honeyboard",
+        "com.samsung.android.svoiceime",
+        "com.samsung.android.sdk.handwriting",
+        "com.diotek.sec.lookup.dictionary",
+        "com.samsung.android.app.soundpicker",
+        "com.samsung.android.secsoundpicker",
+        "com.sec.android.app.soundalive",
+        "com.samsung.android.setting.multisound",
+        "com.samsung.android.aircommandmanager"
+      ],
+      "prefixes": []
+    },
+    {
+      "id": "samsung_device_care_account",
+      "label": "Samsung Device Care / Account",
+      "defaultAction": "review",
+      "reason": "Samsung Device Care (battery/storage optimization), Samsung Account sign-in, cloud services, AI recommendations (Rubin), analytics, app update center, and FOTA agent. Removing may prevent Samsung account features, OTA updates through Samsung channels, or device optimization tools.",
+      "packages": [
+        "com.samsung.android.lool",
+        "com.osp.app.signin",
+        "com.samsung.android.rubin.app",
+        "com.samsung.android.app.updatecenter",
+        "com.samsung.android.app.kfa",
+        "com.samsung.android.app.omcagent",
+        "com.samsung.android.knox.analytics.uploader",
+        "com.sec.enterprise.knox.cloudmdm.smdms"
+      ],
+      "prefixes": []
+    },
+    {
+      "id": "samsung_themes_wallpaper",
+      "label": "Samsung Themes / Wallpaper",
+      "defaultAction": "review",
+      "reason": "Theme center, wallpaper resources, multi-wallpaper pack, dynamic lock screen wallpapers, Dress Room (AR outfit try-on), and personalization service. Safe to remove if you don't customize themes or wallpapers through Samsung's tools.",
+      "packages": [
+        "com.samsung.android.themecenter",
+        "com.samsung.android.wallpaper.res",
+        "com.samsung.android.beyond.p00.wallpapermulti",
+        "com.samsung.android.app.dressroom",
+        "com.sec.android.app.personalization"
+      ],
+      "prefixes": []
+    },
+    {
+      "id": "samsung_knox_enterprise",
+      "label": "Samsung Knox Enterprise",
+      "defaultAction": "review",
+      "reason": "Knox enterprise management: analytics, push manager, KPE core, KLMS agent, Knox VPN proxy, MDM, cloud MDM, and SIM pin MDM. Safe to remove on personal devices not managed by an organization. Required for work profiles and enterprise management.",
+      "packages": [
+        "com.samsung.android.knox.attestation",
+        "com.samsung.android.knox.containeragent",
+        "com.samsung.android.knox.containercore",
+        "com.samsung.android.knox.kpecore",
+        "com.samsung.android.knox.pushmanager",
+        "com.samsung.klmsagent",
+        "com.knox.vpn.proxyhandler",
+        "com.samsung.android.mdm",
+        "com.sec.enterprise.mdm.services.simpin"
+      ],
+      "prefixes": []
+    },
+    {
+      "id": "samsung_link_to_windows",
+      "label": "Samsung Link to Windows",
+      "defaultAction": "review",
+      "reason": "Samsung's Link to Windows service for phone-to-PC connectivity. Separate from DeX desktop mode. Safe to remove if you don't use the Windows Your Phone / Phone Link app.",
+      "packages": [
+        "com.samsung.android.mdecservice"
+      ],
+      "prefixes": []
+    },
+    {
+      "id": "samsung_kids_digital_wellbeing",
+      "label": "Samsung Kids / Digital Wellbeing",
+      "defaultAction": "review",
+      "reason": "Kids installer sets up Samsung Kids mode. Digital Wellbeing (forest) tracks screen time and app usage. Safe to remove if you don't use parental controls or screen time tracking through Samsung.",
+      "packages": [
+        "com.samsung.android.kidsinstaller",
+        "com.samsung.android.forest"
+      ],
+      "prefixes": []
+    },
+    {
+      "id": "samsung_wearable_covers",
+      "label": "Samsung Wearable / Covers",
+      "defaultAction": "review",
+      "reason": "Watch manager stub for Galaxy Watch pairing, and LED/back cover accessories. Safe to remove if you don't own a Galaxy Watch or LED cover case.",
+      "packages": [
+        "com.samsung.android.app.watchmanagerstub",
+        "com.sec.android.cover.ledcover",
+        "com.samsung.android.app.ledbackcover"
+      ],
+      "prefixes": []
+    },
+    {
+      "id": "samsung_blockchain",
+      "label": "Samsung Blockchain",
+      "defaultAction": "review",
+      "reason": "Samsung Blockchain cold wallet service for cryptocurrency key storage. Safe to remove if you don't use Samsung's blockchain wallet feature.",
+      "packages": [
+        "com.samsung.android.coldwalletservice"
+      ],
+      "prefixes": []
+    },
+    {
+      "id": "samsung_weather",
+      "label": "Samsung Weather",
+      "defaultAction": "review",
+      "reason": "Samsung's built-in weather app. Safe to remove if you use a third-party weather app.",
+      "packages": [
+        "com.sec.android.daemonapp"
+      ],
+      "prefixes": []
+    },
+    {
+      "id": "caller_id_hiya",
+      "label": "Caller ID / Spam Protection (Hiya)",
+      "defaultAction": "review",
+      "reason": "Hiya caller ID and spam call protection, often pre-installed on Samsung devices. Safe to remove if you use a different caller ID app or don't want spam filtering.",
+      "packages": [
+        "com.hiya.star"
+      ],
+      "prefixes": []
+    },
+    {
+      "id": "google_optional_apps",
+      "label": "Google Optional Apps",
+      "defaultAction": "review",
+      "reason": "Optional Google apps: Android Auto, Google TTS, Files/Documents UI, Device Health (Turbo), Private Compute Services, Feedback, Location History, Carrier WiFi, Restore, and print recommendation. Safe to remove based on personal usage, but Google TTS is needed for text-to-speech and Restore helps with device migration.",
+      "packages": [
+        "com.google.android.projection.gearhead",
+        "com.google.android.tts",
+        "com.google.android.documentsui",
+        "com.google.android.apps.turbo",
+        "com.google.android.as.oss",
+        "com.google.android.feedback",
+        "com.google.android.gms.location.history",
+        "com.google.android.apps.carrier.carrierwifi",
+        "com.google.android.apps.restore",
+        "com.google.android.printservice.recommendation"
+      ],
+      "prefixes": []
+    },
+    {
+      "id": "samsung_smartthings",
+      "label": "Samsung SmartThings",
+      "defaultAction": "review",
+      "reason": "Samsung SmartThings IoT platform service for controlling smart home devices. Safe to remove if you don't use SmartThings-compatible smart home devices.",
+      "packages": [
+        "com.samsung.android.service.stplatform"
+      ],
+      "prefixes": []
+    },
+    {
+      "id": "samsung_server_wifi_security",
+      "label": "Samsung Wi-Fi Security (WIPS)",
+      "defaultAction": "keep",
+      "reason": "Samsung Wi-Fi Intrusion Prevention System (MobileWIPS) monitors for rogue access points and Wi-Fi attacks. Part of Samsung's security framework.",
+      "packages": [
+        "com.samsung.android.server.wifi.mobilewips"
+      ],
+      "prefixes": []
+    },
+    {
+      "id": "sec_misc_apps",
+      "label": "Samsung Misc System Apps",
+      "defaultAction": "keep",
+      "reason": "Miscellaneous Samsung system apps including data creation tools, quick tools, app linker, and APEX manager. These support various system functions and are generally harmless to keep.",
+      "packages": [
+        "com.sec.android.app.DataCreate",
+        "com.sec.android.app.quicktool",
+        "com.sec.android.app.applinker",
+        "com.sec.android.app.apex"
+      ],
+      "prefixes": []
     }
   ]
 }
