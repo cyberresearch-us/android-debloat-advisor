@@ -374,6 +374,27 @@
     },
 
     {
+      "id": "samsung_account_keep",
+      "label": "Samsung Account",
+      "defaultAction": "keep",
+      "reason": "Deeply integrated into Samsung phones. Removing can cause persistent error popups, break Find My Mobile, Samsung Cloud, and Settings pages that reference your Samsung account.",
+      "packages": [
+        "com.osp.app.signin"
+      ],
+      "prefixes": []
+    },
+    {
+      "id": "google_tts_keep",
+      "label": "Google Text-to-Speech",
+      "defaultAction": "keep",
+      "reason": "Used by Google Maps for turn-by-turn voice navigation, accessibility screen readers, and any app that reads text aloud. Removing breaks spoken directions and TTS features.",
+      "packages": [
+        "com.google.android.tts"
+      ],
+      "prefixes": []
+    },
+
+    {
       "id": "android_os_framework",
       "label": "Android OS Framework",
       "defaultAction": "keep",
@@ -835,7 +856,6 @@
       "reason": "Samsung Device Care (battery/storage optimization), Samsung Account sign-in, cloud services, AI recommendations (Rubin), analytics, app update center, and FOTA agent. Removing may prevent Samsung account features, OTA updates through Samsung channels, or device optimization tools.",
       "packages": [
         "com.samsung.android.lool",
-        "com.osp.app.signin",
         "com.samsung.android.rubin.app",
         "com.samsung.android.app.updatecenter",
         "com.samsung.android.app.kfa",
@@ -947,7 +967,6 @@
       "reason": "Optional Google apps: Android Auto, Google TTS, Files/Documents UI, Device Health (Turbo), Private Compute Services, Feedback, Location History, Carrier WiFi, Restore, and print recommendation. Safe to remove based on personal usage, but Google TTS is needed for text-to-speech and Restore helps with device migration.",
       "packages": [
         "com.google.android.projection.gearhead",
-        "com.google.android.tts",
         "com.google.android.documentsui",
         "com.google.android.apps.turbo",
         "com.google.android.as.oss",
