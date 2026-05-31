@@ -74,7 +74,9 @@
         "com.facebook.system",
         "com.facebook.appmanager"
       ],
-      "prefixes": ["com.facebook."]
+      "prefixes": [
+        "com.facebook."
+      ]
     },
     {
       "id": "social_other",
@@ -134,7 +136,9 @@
         "com.microsoft.skydrive",
         "com.microsoft.launcher.ent"
       ],
-      "prefixes": ["com.microsoft."]
+      "prefixes": [
+        "com.microsoft."
+      ]
     },
     {
       "id": "gaming_samsung",
@@ -146,7 +150,9 @@
         "com.samsung.android.game.gametools",
         "com.samsung.android.game.gos"
       ],
-      "prefixes": ["com.samsung.gamedriver."]
+      "prefixes": [
+        "com.samsung.gamedriver."
+      ]
     },
     {
       "id": "gaming_google",
@@ -167,7 +173,9 @@
         "com.oneplus.gamespace",
         "com.oneplus.gameinstaller"
       ],
-      "prefixes": ["com.oneplus.gamespace."]
+      "prefixes": [
+        "com.oneplus.gamespace."
+      ]
     },
     {
       "id": "ar_vr_samsung",
@@ -210,7 +218,9 @@
         "com.samsung.android.app.settings.bixby",
         "com.samsung.android.app.routines"
       ],
-      "prefixes": ["com.samsung.android.bixby."]
+      "prefixes": [
+        "com.samsung.android.bixby."
+      ]
     },
     {
       "id": "samsung_optional",
@@ -238,7 +248,9 @@
         "com.dsi.ant.plugins.antplus",
         "com.dsi.ant.sample.acquirechannels"
       ],
-      "prefixes": ["com.dsi.ant."]
+      "prefixes": [
+        "com.dsi.ant."
+      ]
     },
     {
       "id": "carrier_bloatware",
@@ -251,7 +263,12 @@
         "com.samsung.attvvm",
         "com.example.tmo"
       ],
-      "prefixes": ["com.vzw.", "com.att.", "com.tmobile.", "com.sprint."]
+      "prefixes": [
+        "com.vzw.",
+        "com.att.",
+        "com.tmobile.",
+        "com.sprint."
+      ]
     },
     {
       "id": "oneplus_optional",
@@ -293,7 +310,9 @@
         "com.heytap.mcs",
         "com.heytap.openid"
       ],
-      "prefixes": ["com.heytap."]
+      "prefixes": [
+        "com.heytap."
+      ]
     },
     {
       "id": "pixel_optional",
@@ -358,7 +377,9 @@
       "label": "Google Play Store",
       "defaultAction": "keep",
       "reason": "Removing blocks normal Play installs/updates; use Family Link to restrict instead.",
-      "packages": ["com.android.vending"],
+      "packages": [
+        "com.android.vending"
+      ],
       "prefixes": []
     },
     {
@@ -372,7 +393,6 @@
       ],
       "prefixes": []
     },
-
     {
       "id": "samsung_account_keep",
       "label": "Samsung Account",
@@ -393,7 +413,6 @@
       ],
       "prefixes": []
     },
-
     {
       "id": "android_os_framework",
       "label": "Android OS Framework",
@@ -453,7 +472,16 @@
         "com.android.vpndialogs",
         "com.android.wallpaperbackup",
         "com.android.wallpapercropper",
-        "com.android.wifi.resources"
+        "com.android.wifi.resources",
+        "android",
+        "com.android.phone",
+        "com.android.providers.contacts",
+        "com.android.providers.media",
+        "com.android.providers.settings",
+        "com.android.providers.telephony",
+        "com.android.server.telecom",
+        "com.android.settings",
+        "com.android.systemui"
       ],
       "prefixes": [
         "com.android.internal.display.cutout.emulation.",
@@ -504,7 +532,13 @@
         "com.google.android.partnersetup",
         "com.google.android.syncadapters.calendar",
         "com.google.android.syncadapters.contacts",
-        "com.google.mainline.telemetry"
+        "com.google.mainline.telemetry",
+        "com.google.android.gms",
+        "com.google.android.gsf",
+        "com.google.android.networkstack",
+        "com.google.android.packageinstaller",
+        "com.google.android.permissioncontroller",
+        "com.google.android.webview"
       ],
       "prefixes": []
     },
@@ -1008,6 +1042,412 @@
         "com.sec.android.app.quicktool",
         "com.sec.android.app.applinker",
         "com.sec.android.app.apex"
+      ],
+      "prefixes": []
+    },
+    {
+      "id": "critical_motorola",
+      "label": "Critical (Motorola)",
+      "defaultAction": "keep",
+      "reason": "Core Motorola phone components — removing can break launcher, calls, camera, or contacts.",
+      "packages": [
+        "com.motorola.launcher3",
+        "com.motorola.camera3",
+        "com.motorola.systemserver",
+        "com.motorola.faceunlock",
+        "com.google.android.dialer",
+        "com.google.android.contacts",
+        "com.google.android.apps.messaging",
+        "com.google.android.inputmethod.latin"
+      ],
+      "prefixes": []
+    },
+    {
+      "id": "android_os_extended",
+      "label": "Android OS (extended)",
+      "defaultAction": "keep",
+      "reason": "Additional AOSP system components: overlays, providers, system services, fonts, and icon themes. Removing can break system stability or visual appearance.",
+      "packages": [
+        "android.auto_generated_rro_product__",
+        "android.autoinstalls.config.motorola.layout",
+        "com.android.cellbroadcast.overlay",
+        "com.android.cellbroadcastservice.overlay",
+        "com.android.contacts",
+        "com.android.credentialmanager",
+        "com.android.devicelockcontroller",
+        "com.android.dialer",
+        "com.android.emergency",
+        "com.android.intentresolver",
+        "com.android.networkstack.inprocess.overlay",
+        "com.android.networkstack.overlay",
+        "com.android.networkstack.tethering.inprocess.overlay",
+        "com.android.networkstack.tethering.overlay",
+        "com.android.phone.overlay.carriersettings",
+        "com.android.phone.overlay.common",
+        "com.android.phone.overlay.motcommon",
+        "com.android.providers.settings.auto_generated_rro_product__",
+        "com.android.providers.telephony.overlay.carriersettings",
+        "com.android.rkpdapp",
+        "com.android.role.notes.enabled",
+        "com.android.settings.auto_generated_rro_product__",
+        "com.android.soundpicker",
+        "com.android.systemui.accessibility.accessibilitymenu",
+        "com.android.systemui.auto_generated_rro_product__",
+        "com.android.systemui.auto_generated_rro_vendor__",
+        "com.android.systemui.plugin.globalactions.wallet",
+        "com.android.theme.font.Exo2Regular",
+        "com.android.theme.font.RobotoSlabRegular",
+        "com.android.theme.font.RookeryRegular",
+        "com.android.theme.icon.pebble",
+        "com.android.theme.icon.round",
+        "com.android.theme.icon.roundedrect",
+        "com.android.theme.icon.teardrop",
+        "com.android.uwb.resources",
+        "com.android.virtualmachine.res",
+        "com.android.wifi.mainline.resources.overlay",
+        "com.android.wifi.resources.overlay",
+        "com.android.wifi.resources.overlay.motCommon"
+      ],
+      "prefixes": []
+    },
+    {
+      "id": "google_system_extended",
+      "label": "Google System Services (extended)",
+      "defaultAction": "keep",
+      "reason": "Additional Google system infrastructure: IMS, network stack, health services, safety, privacy sandbox, and config overlays. Required for phone functionality and Play Services.",
+      "packages": [
+        "com.google.android.ims",
+        "com.google.android.networkstack.overlay",
+        "com.google.android.networkstack.tethering",
+        "com.google.android.networkstack.tethering.overlay",
+        "com.google.android.connectivity.resources",
+        "com.google.android.wifi.resources",
+        "com.google.android.wifi.dialog",
+        "com.google.android.hotspot2.osulogin",
+        "com.google.android.overlay.gmsconfig.asi",
+        "com.google.android.overlay.gmsconfig.comms",
+        "com.google.android.overlay.gmsconfig.personalsafety",
+        "com.google.android.overlay.modules.captiveportallogin.forframework",
+        "com.google.android.overlay.modules.ext.services",
+        "com.google.android.cellbroadcastreceiver",
+        "com.google.android.cellbroadcastservice",
+        "com.google.android.providers.media.module",
+        "com.google.android.safetycenter.resources",
+        "com.google.android.safetycore",
+        "com.google.android.adservices.api",
+        "com.google.android.sdksandbox",
+        "com.google.android.federatedcompute",
+        "com.google.android.ondevicepersonalization.services",
+        "com.google.android.health.connect.backuprestore",
+        "com.google.android.healthconnect.controller",
+        "com.google.android.photopicker",
+        "com.google.android.appsearch.apk",
+        "com.google.android.server.deviceconfig.resources",
+        "com.google.android.tag",
+        "com.google.android.carrier",
+        "com.google.android.wfcactivation",
+        "com.google.android.marvin.talkback",
+        "com.google.android.accessibility.switchaccess",
+        "com.google.mainline.adservices",
+        "com.google.ambient.streaming",
+        "com.google.android.contactkeys"
+      ],
+      "prefixes": []
+    },
+    {
+      "id": "google_apps_moto",
+      "label": "Google Apps (optional)",
+      "defaultAction": "review",
+      "reason": "Google apps preinstalled on Motorola. Safe to remove if you use alternatives, but some provide useful features.",
+      "packages": [
+        "com.google.android.calculator",
+        "com.google.android.apps.docs.editors.docs",
+        "com.google.android.apps.chromecast.app",
+        "com.google.android.apps.nbu.files",
+        "com.google.android.apps.adm",
+        "com.google.android.apps.safetyhub",
+        "com.google.android.apps.subscriptions.red",
+        "com.google.android.apps.youtube.music.setupwizard"
+      ],
+      "prefixes": []
+    },
+    {
+      "id": "mediatek_chipset",
+      "label": "MediaTek Chipset (system)",
+      "defaultAction": "keep",
+      "reason": "MediaTek hardware and telephony services — IMS, RCS, carrier provisioning, GPU, and system overlays. Required for phone calls, mobile data, and hardware functionality.",
+      "packages": [
+        "com.mediatek",
+        "com.mediatek.capctrl.service",
+        "com.mediatek.carrierexpress",
+        "com.mediatek.frameworkresoverlay",
+        "com.mediatek.FrameworkResOverlayExt",
+        "com.mediatek.gbaservice",
+        "com.mediatek.ims",
+        "com.mediatek.ims.rcsua.service",
+        "com.mediatek.location.lppe.main",
+        "com.mediatek.MtkSettingsResOverlay",
+        "com.mediatek.op12.ims",
+        "com.mediatek.presence",
+        "com.mediatek.rsu.tfn",
+        "com.mediatek.SettingsProviderResOverlay",
+        "com.mediatek.telephony"
+      ],
+      "prefixes": [
+        "com.mediatek."
+      ]
+    },
+    {
+      "id": "motorola_system_framework",
+      "label": "Motorola System Framework",
+      "defaultAction": "keep",
+      "reason": "Core Motorola system services: settings providers, setup wizards, overlays, OTA updates, carrier config, NFC, modem stats, and system infrastructure. Removing can break phone setup, updates, or carrier features.",
+      "packages": [
+        "com.motorola.android.providers.settings",
+        "com.motorola.android.providers.settings.auto_generated_rro_product__",
+        "com.motorola.android.providers.settings.overlay.dppnone",
+        "com.motorola.android.providers.settings.overlay.tapwakeoff",
+        "com.motorola.android.providers.chromehomepage",
+        "com.motorola.setup",
+        "com.motorola.setup.auto_generated_rro_product__",
+        "com.motorola.setup.auto_generated_rro_vendor__",
+        "com.motorola.setup.overlay.att",
+        "com.motorola.setup.overlay.att.simoobe",
+        "com.motorola.setup.overlay.pai",
+        "com.motorola.setup.overlay.tracfone",
+        "com.motorola.setup.overlay.tracfone.old",
+        "com.motorola.android.overlay.common",
+        "com.motorola.android.overlay.deviceconfig.gnevan",
+        "com.motorola.android.overlay.lpptoga",
+        "com.motorola.android.overlay.midram",
+        "com.motorola.android.overlay.mtk.common",
+        "com.motorola.android.systemui.overlay.att",
+        "com.motorola.android.systemui.overlay.sprint",
+        "com.motorola.android.systemui.overlay.tmo",
+        "com.motorola.android.systemui.overlay.usc",
+        "com.motorola.android.systemui.overlay.vzw",
+        "com.motorola.systemui.overlay.jp",
+        "com.motorola.android.settings.overlay.att",
+        "com.motorola.android.settings.overlay.fps.side",
+        "com.motorola.android.settings.overlay.global",
+        "com.motorola.android.launcher.overlay.animation.scale",
+        "com.motorola.android.launcher.overlay.applabeltwolines",
+        "com.motorola.android.launcher.overlay.att",
+        "com.motorola.android.launcher.overlay.att.apptray",
+        "com.motorola.android.launcher.overlay.cricket.apptray",
+        "com.motorola.android.launcher.overlay.koodo",
+        "com.motorola.android.launcher.overlay.motolauncheroverlayna",
+        "com.motorola.android.launcher.overlay.mvnos",
+        "com.motorola.android.launcher.overlay.retail",
+        "com.motorola.android.launcher.overlay.retail.row",
+        "com.motorola.android.launcher.overlay.telus",
+        "com.motorola.overlay.launcher3",
+        "com.motorola.android.connectivity.resources.overlay",
+        "com.motorola.android.coresettingsext.overlay.doubletap",
+        "com.motorola.android.coresettingsext.overlay.gnevan",
+        "com.motorola.android.networkstack.overlay.mcc460",
+        "com.motorola.android.networkstack.tethering.overlay.motCommon",
+        "com.motorola.android.provisioning",
+        "com.motorola.android.fota",
+        "com.motorola.android.nativedropboxagent",
+        "com.motorola.ccc.devicemanagement",
+        "com.motorola.ccc.mainplm",
+        "com.motorola.ccc.ota",
+        "com.motorola.ccc.notification",
+        "com.motorola.coresettingsext",
+        "com.motorola.bach.modemstats",
+        "com.motorola.revoker.services",
+        "com.motorola.paks",
+        "com.motorola.paks.notification",
+        "com.motorola.hiddenmenuapp",
+        "com.motorola.thermalservice",
+        "com.motorola.wifi.motowifimetrics",
+        "com.motorola.sarcontrol",
+        "com.motorola.imagertuning_u",
+        "com.motorola.lifetimedata",
+        "com.motorola.appdirectedsmsproxy",
+        "com.motorola.callredirectionservice",
+        "com.motorola.rcsConfigService",
+        "com.motorola.nfwlocationattribution",
+        "com.motorola.nfc",
+        "com.motorola.bug2go",
+        "com.motorola.motosignature.app",
+        "com.motorola.motosignature2.app",
+        "com.motorola.demo",
+        "com.motorola.gesture",
+        "com.motorola.msimsettings",
+        "com.motorola.msimsettings.overlay",
+        "com.motorola.slpc_sys",
+        "com.motorola.sstservice",
+        "com.motorola.safetycenter.resources.overlay",
+        "com.motorola.actions.overlay",
+        "com.motorola.dynamicvolumeoverlay",
+        "com.motorola.launcherconfig",
+        "com.motorola.launcherconfig.overlay.att",
+        "com.motorola.launcherconfig.overlay.attpre",
+        "com.motorola.launcherconfig.overlay.cricket",
+        "com.motorola.launcherconfig.overlay.retca",
+        "com.motorola.launcherconfig.overlay.retus",
+        "com.motorola.launcherconfig.overlay.tracfone",
+        "com.motorola.contacts.preloadcontacts",
+        "com.motorola.contacts.preloadcontacts.overlay.vzw",
+        "com.motorola.easyprefix",
+        "com.motorola.motocit"
+      ],
+      "prefixes": []
+    },
+    {
+      "id": "motorola_carrier_extensions",
+      "label": "Motorola Carrier Extensions",
+      "defaultAction": "keep",
+      "reason": "Carrier-specific Motorola components for AT&T, Verizon, T-Mobile, TracFone, Cricket, Spectrum, and Comcast. Required for carrier features like VoWiFi, device management, and SIM provisioning.",
+      "packages": [
+        "com.motorola.att.phone.extensions",
+        "com.motorola.att.sim.extensions",
+        "com.motorola.attvowifi",
+        "com.motorola.omadm.att",
+        "com.motorola.omadm.service",
+        "com.motorola.omadm.vzw",
+        "com.motorola.vzw.pco.extensions.pcoreceiver",
+        "com.motorola.carrierconfig",
+        "com.motorola.carriersettingsext",
+        "com.motorola.entitlement",
+        "com.motorola.extensions.tracfone",
+        "com.motorola.tracfone.rsu",
+        "com.motorola.spectrum.setup.extensions",
+        "com.motorola.comcast.settings.extensions",
+        "com.verizon.loginengine.unbranded",
+        "com.spectrum.cm.headless",
+        "com.tracfone.preload.accountservices",
+        "com.tracfone.generic.mysites",
+        "com.swishme.tracfone",
+        "com.mizmowireless.acctmgt",
+        "com.cricketwireless.minus",
+        "com.cricketwireless.thescoop",
+        "com.handmark.expressweather"
+      ],
+      "prefixes": []
+    },
+    {
+      "id": "euicc_esim",
+      "label": "eSIM / eUICC Partner",
+      "defaultAction": "keep",
+      "reason": "eSIM provisioning app and carrier-specific overlays. Required for eSIM activation and management.",
+      "packages": [
+        "com.oem.euiccpartnerapp"
+      ],
+      "prefixes": [
+        "com.oem.euiccpartnerapp."
+      ]
+    },
+    {
+      "id": "motorola_apps_optional",
+      "label": "Motorola Apps (optional)",
+      "defaultAction": "review",
+      "reason": "Optional Motorola apps and features. Safe to remove based on personal usage, but some provide useful Motorola-specific features like gesture controls and Dolby audio.",
+      "packages": [
+        "com.motorola.moto",
+        "com.motorola.actions",
+        "com.motorola.motocare",
+        "com.motorola.mototour",
+        "com.motorola.help",
+        "com.motorola.help.extlog",
+        "com.motorola.screenshoteditor",
+        "com.motorola.audiorecorder",
+        "com.motorola.gamemode",
+        "com.motorola.fmplayer",
+        "com.motorola.android.fmradio",
+        "com.motorola.dolby.dolbyui",
+        "com.dolby.daxservice",
+        "com.motorola.handwriting",
+        "com.motorola.handwritingcalculator",
+        "com.motorola.livewallpaper3",
+        "com.motorola.timeweatherwidget",
+        "com.motorola.personalize",
+        "com.motorola.spaces",
+        "com.motorola.mobiledesktop.core",
+        "com.motorola.motcameradesktop",
+        "com.motorola.camera3.content.ai",
+        "com.motorola.aiservices",
+        "com.motorola.genie",
+        "com.motorola.appforecast",
+        "com.motorola.securevault",
+        "com.motorola.securityhub",
+        "com.motorola.securityhubext",
+        "com.motorola.stylus",
+        "com.motorola.dynamicvolume",
+        "com.motorola.discovery",
+        "com.motorola.brapps",
+        "com.motorola.systemui.desk"
+      ],
+      "prefixes": []
+    },
+    {
+      "id": "motorola_enterprise",
+      "label": "Motorola / Lenovo Enterprise",
+      "defaultAction": "review",
+      "reason": "Lenovo ID and Motorola enterprise management services. Safe to remove on personal devices not managed by an employer.",
+      "packages": [
+        "com.lenovo.lsf.user",
+        "com.motorola.enterprise.service",
+        "com.motorola.enterprise.adapter.service"
+      ],
+      "prefixes": []
+    },
+    {
+      "id": "trusted_execution_bluetooth",
+      "label": "Security / Bluetooth Codecs",
+      "defaultAction": "keep",
+      "reason": "Trusted Execution Environment (TEE) services for secure operations like payments and DRM, and Bluetooth aptX HD codec for high-quality audio. Removing may break secure payments or degrade Bluetooth audio quality.",
+      "packages": [
+        "com.trustonic.teeservice",
+        "com.trustonic.alpsservice",
+        "com.bluetooth.aptxmode"
+      ],
+      "prefixes": []
+    },
+    {
+      "id": "bloatware_adware",
+      "label": "Bloatware / Adware",
+      "defaultAction": "remove",
+      "reason": "Advertising platforms and bloatware installers preloaded by carriers. DTIgnite silently installs apps, InMobi and Glance show ads, Aura shows recommendations during setup. Safe and recommended to remove.",
+      "packages": [
+        "com.dti.motorola",
+        "com.inmobi.installer",
+        "com.glance.lockscreenM",
+        "com.aura.oobe.motorola",
+        "com.digitalturbine.android.apps.news.att",
+        "com.dxm.nopuzzle",
+        "com.amazon.appmanager"
+      ],
+      "prefixes": []
+    },
+    {
+      "id": "user_installed_apps",
+      "label": "User-Installed Apps",
+      "defaultAction": "keep",
+      "reason": "Apps you installed from the Play Store. These are your personal apps — not bloatware.",
+      "packages": [
+        "org.thoughtcrime.securesms",
+        "com.spotify.music",
+        "com.pinterest",
+        "com.audible.application",
+        "com.canva.editor",
+        "com.lastpass.lpandroid",
+        "com.azure.authenticator",
+        "com.yahoo.mobile.client.android.mail",
+        "co.happybits.marcopolo",
+        "com.remind101",
+        "com.parentsquare.psapp",
+        "com.dna.solitaireapp",
+        "com.contentwatch.ghoti.cp2.parent",
+        "org.familysearch.mobile",
+        "org.lds.ldssa",
+        "org.lds.ldstools",
+        "org.chromium.webapk.a3841a04afa5f4f03_v2",
+        "org.chromium.webapk.aa3946418664f9661_v2",
+        "com.hp.printercontrol",
+        "com.hp.android.printservice"
       ],
       "prefixes": []
     }
